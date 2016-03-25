@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>DURIAN</title>
+
+    <!-- Get version 1.1.0 of Fabric.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.1.0/fabric.all.min.js" ></script>
+
+    <!-- Get the highest 1.X version of jQuery from CDN. Required for ready() function. --> 
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+    <div id="wrapper">
+	<div id="results-c1">The results</div>​
+	<div id="results-c2">The results</div>​
+	<br>
+
+	<canvas id="c1" width="400" height="350"></canvas>
+	<canvas id="c2" width="400" height="350"></canvas>
+    </div>
+
+
+    <script type="text/javascript">
+     var socket = io.connect('http://localhost:5000/elderberry');
+     socket.on('update', function(msg) {
+         console.log(JSON.stringify(msg['centroid']));
+     });
+     socket.on('connect', function() {
+         socket.emit('my event', {data: 'I\'m connected!'});
+     });
+     function send_data(data){
+	 console.log('sending',JSON.stringify(data));
+	 socket.emit('data',data);
+     }
+     (function() {
+	 fabric.Object.prototype.transparentCorners = false;
+	 fabric.Object.prototype.hasControls = false;
+
+	 this.canvas1 = new fabric.Canvas('c1', { backgroundColor: "#000" });
+
+	 var i, dot,
+	     getRandomInt = fabric.util.getRandomInt,
+	     rainbow    = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"],
+	     rainbowEnd = rainbow.length - 1;
+
+	 //
+	 // Rendering canvas #1
+	 //
+	 // var canvas1  = new fabric.Canvas('c1', { backgroundColor: "#000" }),
+	 results1 = document.getElementById('results-c1');
+
+	 var generate_data = function(){
+	     for (i = 50; i >= 0; i--) {
+		 dot = new fabric.Circle({
+		     left:   getRandomInt(0, 400),
+		     top:    getRandomInt(0, 350),
+		     radius: 9,
+		     fill:   rainbow[getRandomInt(0, rainbowEnd)]
+		 });
+
+		 dot.hasControls = false;
+
+		 canvas1.add(dot);
+	     }
+	 }    
+
+	 function animate(e, dir) {
+	     // //console.log(e)
+	     if (e.target) {
+		 fabric.util.animate({
+		     onChange: function(value) {
+			 data = {};
+			 if (canvas1.getActiveGroup() != undefined){
+			     for (i in canvas1.getObjects()){
+				 
+				 if (canvas1.getObjects()[i].active){
+				     data[i] = [
+					 canvas1.getObjects()[i].getLeft() + canvas1.getActiveGroup().left, 
+					 canvas1.getObjects()[i].getTop()  + canvas1.getActiveGroup().top
+				     ];
+				 }
+				 else{
+				     //console.log(i+": "+ (canvas1.getObjects()[i].getLeft()) +" top :"+ (canvas1.getObjects()[i].getTop()));              
+				 }
+			     }              
+			 }
+			 else{
+			     //console.log(e.target.setCoords())
+				 data['singleton'] = e.target.setCoords();
+			 }
+		     },
+		     onComplete: function() {
+			 console.log('done');
+			 send_data(data);
+			 // canvas1.renderAll();
+			 //console.log(canvas1._objects)
+		     }
+		 });
+	     }
+	 }
+
+	 generate_data()
+
+	     canvas1.on('object:moving', function(e) { 
+		 animate(e, 1);
+	     });
+
+	 // canvas1.on('before:selection:cleared', function(e) { 
+	 //   for(i in canvas1.getActiveGroup().getObjects()){
+	 //       //console.log(canvas1.getActiveGroup().getObjects()[i])  
+	 //   }
+	 
+	 //  });
+
+
+	 points = canvas1._objects
+
+     })();
+    </script>
+</html>

@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask.ext.socketio import SocketIO, emit
 import random
+from Algorithms import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = str(random.random())
@@ -28,7 +29,7 @@ def test_message(message):
 
 @socketio.on('get_projection', namespace='/elderberry')
 def get_projection(message):
-    emit('projection', {'data': [[20,100,0],[141,81,1]]})
+    emit('projection', {'data': [list(x) for x in get_random_view()]})
 
 @socketio.on('my broadcast event', namespace='/elderberry')
 def test_message(message):

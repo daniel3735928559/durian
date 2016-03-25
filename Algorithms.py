@@ -3,6 +3,24 @@ import numpy as np
 import math
 from sklearn import datasets, linear_model
 
+def get_random_view():
+
+    iris = datasets.load_iris()
+    data = 20*iris['data']
+    labels = list(iris['target'])
+
+    p = data.shape[1]
+    n = data.shape[0]
+
+    proj = np.random.rand(p,2)
+
+    view = np.dot(data, proj)
+
+    view = np.column_stack((view, labels))
+    
+    return view
+    
+
 def pursue_target_grad_descent(target, curr, data, old_proj, selection):
     '''
     Args:
@@ -157,3 +175,4 @@ if __name__ == '__main__':
 
     print 'Test'
     
+    v = get_random_view()

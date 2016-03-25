@@ -12,30 +12,47 @@
 
     <div id="wrapper">
 	<div id="results-c1">The results</div>​
-	<div id="results-c2">The results</div>​
 	<br>
-
 	<canvas id="c1" width="400" height="350"></canvas>
-	<canvas id="c2" width="400" height="350"></canvas>
     </div>
 
 
     <script type="text/javascript">
-     var socket = io.connect('http://localhost:5000/elderberry');
-     socket.on('update', function(msg) {
-         console.log(JSON.stringify(msg['centroid']));
-     });
-     socket.on('connect', function() {
-         socket.emit('my event', {data: 'I\'m connected!'});
-     });
-     function send_data(data){
-	 console.log('sending',JSON.stringify(data));
-	 socket.emit('data',data);
-     }
      (function() {
 	 fabric.Object.prototype.transparentCorners = false;
 	 fabric.Object.prototype.hasControls = false;
 
+	 var socket = io.connect('http://localhost:5000/elderberry');
+	 socket.on('projection', function(msg) {
+	     canvas1.clear().renderAll();
+	     var data = msg['data'];
+	     for (i = 0; i < data.length; i++) {
+		 dot = new fabric.Circle({
+		     left:   data[i][0],
+		     top:    data[i][1],
+		     radius: 9,
+		     fill:   rainbow[data[i][2]]
+		 });
+
+		 dot.hasControls = false;
+
+		 canvas1.add(dot);
+	     }
+	     canvas1.renderAll();
+	 });
+	 socket.on('update', function(msg) {
+             console.log(JSON.stringify(msg['centroid']));
+	 });
+	 socket.on('connect', function() {
+             socket.emit('my event', {data: 'I\'m connected!'});
+	 });
+	 function send_data(data){
+	     console.log('sending',JSON.stringify(data));
+	     //socket.emit('data',data);
+	 }
+         //socket.emit('get_projection', {'view':[]});
+
+	 
 	 this.canvas1 = new fabric.Canvas('c1', { backgroundColor: "#000" });
 
 	 var i, dot,
@@ -82,7 +99,8 @@
 				 else{
 				     //console.log(i+": "+ (canvas1.getObjects()[i].getLeft()) +" top :"+ (canvas1.getObjects()[i].getTop()));              
 				 }
-			     }              
+			     }
+			     socket.emit('get_projection', {'view':[]});
 			 }
 			 else{
 			     //console.log(e.target.setCoords())

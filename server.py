@@ -25,6 +25,11 @@ def test_message(message):
     print(x,y)
     emit('update', {'centroid': [x,y]})
 
+
+@socketio.on('get_projection', namespace='/elderberry')
+def get_projection(message):
+    emit('projection', {'data': [[20,100,0],[141,81,1]]})
+
 @socketio.on('my broadcast event', namespace='/elderberry')
 def test_message(message):
     emit('my response', {'data': message['data']}, broadcast=True)

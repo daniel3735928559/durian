@@ -109,19 +109,21 @@
 		     },
 		     onComplete: function() {
 			 console.log('done');
-			 send_data(data);
 			 // canvas1.renderAll();
 			 //console.log(canvas1._objects)
 		     }
 		 });
 	     }
 	 }
-
+	 
 	 generate_data()
-
+	     
 	     canvas1.on('object:moving', function(e) { 
 		 animate(e, 1);
 	     });
+	 canvas1.on('object:modified', function(e) { 
+	     send_data(data);
+	 });
 
 	 // canvas1.on('before:selection:cleared', function(e) { 
 	 //   for(i in canvas1.getActiveGroup().getObjects()){

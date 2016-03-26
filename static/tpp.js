@@ -56,8 +56,6 @@ function animate(e, dir) {
     }
 }
 
-generate_data();
-
 canvas.on('object:moving', function(e) { 
     animate(e, 1);
 });

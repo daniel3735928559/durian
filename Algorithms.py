@@ -173,6 +173,6 @@ def least_squares_optimized(X,y):
 
 if __name__ == '__main__':
 
-    print 'Test'
+    print('Test')
     
     v = get_random_view()

@@ -11,6 +11,10 @@ socketio = SocketIO(app)
 def index():
     return render_template('index.html')
 
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('static', path)
+
 @socketio.on('data', namespace='/elderberry')
 def test_message(message):
     print('stuuuuuuuuuuuuu')
@@ -29,6 +33,10 @@ def test_message(message):
 
 @socketio.on('get_projection', namespace='/elderberry')
 def get_projection(message):
+    emit('projection', {'data': [list(x) for x in get_random_view()]})
+
+@socketio.on('init_projection', namespace='/elderberry')
+def initial_projection(message):
     emit('projection', {'data': [list(x) for x in get_random_view()]})
 
 @socketio.on('my broadcast event', namespace='/elderberry')

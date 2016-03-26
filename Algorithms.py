@@ -6,7 +6,7 @@ from sklearn import datasets, linear_model
 def get_random_view():
 
     iris = datasets.load_iris()
-    data = 20*iris['data']
+    data = 50*iris['data']
     labels = list(iris['target'])
 
     p = data.shape[1]

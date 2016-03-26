@@ -6,12 +6,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.1.0/fabric.all.min.js" ></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-	
+
+    <script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+    <style>
+      table, th , td {
+      border: 1px solid grey;
+      border-collapse: collapse;
+      padding: 5px;
+      }
+
+      table tr:nth-child(odd) {
+      background-color: #f2f2f2;
+      }
+
+      table tr:nth-child(even) {
+      background-color: #ffffff;
+      }
+    </style>
+          
     <div id="wrapper">
-	<div id="results-c1">The results</div>​
+	<div id="results-c1">View</div>​
 	<br>
-	<canvas id="c1" width="400" height="350"></canvas>
+	<canvas id="c1" width="1600" height="800"></canvas>
     </div>
 
+    <script type="text/javascript" src="static/table.js"></script>    
     <script type="text/javascript" src="static/tpp.js"></script>
+
+    
 </html>

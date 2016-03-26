@@ -1,11 +1,15 @@
 fabric.Object.prototype.transparentCorners = false;
 fabric.Object.prototype.hasControls = false;
 
+
 var socket = io.connect('http://localhost:5000/elderberry');
 socket.on('projection', function(msg) {
     canvas.clear().renderAll();
     var data = msg['data'];
+    
     for (i = 0; i < data.length; i++) {
+
+	info_array.push(data[i][2])
 	dot = new fabric.Circle({
 	    left:   data[i][0],
 	    top:    data[i][1],
@@ -19,10 +23,12 @@ socket.on('projection', function(msg) {
     }
     canvas.renderAll();
 });
-socket.on('connect', function() {});
-socket.emit('init_projection', {});
 
 canvas = new fabric.Canvas('c1', { backgroundColor: "#000" });
+var info_array = []
+
+socket.on('connect', function() {});
+socket.emit('init_projection', {});
 
 var i, dot,
     getRandomInt = fabric.util.getRandomInt,
@@ -59,8 +65,51 @@ function animate(e, dir) {
 canvas.on('object:moving', function(e) { 
     animate(e, 1);
 });
+
+canvas.on('selection:created', function(e) { 
+
+    selected = e.target.objects
+    datatable = []
+    for(i in selected){
+	temp = []
+	index = canvas.getObjects().indexOf(selected[i])
+	desc = info_array[index]
+	if (index != -1){
+	    temp.push(i+1)
+	    temp.push(index)
+	    temp.push(desc)
+	    datatable.push(temp)
+	}
+    }
+    
+    //console.log(datatable)
+    createTable(datatable);
+
+    
+})
+
+canvas.on('object:selected', function(e) { 
+
+    datatable = []
+    temp = []
+    index = canvas.getObjects().indexOf(e.target)
+    desc = info_array[index]
+    if (index != -1){
+	temp.push(i+1)
+	temp.push(index)
+	temp.push(desc)
+	datatable.push(temp)
+    }
+    
+    createTable(datatable);
+
+    
+})
+
 canvas.on('object:modified', function(e) { 
     socket.emit('get_projection', {'view':[]});
+    
 });
 
 points = canvas._objects
+info = info_array

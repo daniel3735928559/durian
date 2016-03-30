@@ -1,8 +1,22 @@
 fabric.Object.prototype.transparentCorners = false;
 fabric.Object.prototype.hasControls = false;
 
+var changed = [];
 
-var socket = io.connect('http://localhost:5000/elderberry');
+function update_view(){
+    var view = [];
+    var arr = canvas.getObjects()
+    for (i = 0; i < arr.length; i++){
+	if(arr[i].changed){
+	    view.push([arr[i].getLeft(), arr[i].getTop()]);
+	}
+    }
+    console.log(arr);
+    console.log(view);
+    socket.emit('get_projection', {'changed':view});
+}
+
+var socket = io.connect('http://localhost:3797/elderberry');
 socket.on('projection', function(msg) {
     canvas.clear().renderAll();
     var data = msg['data'];
@@ -22,6 +36,8 @@ socket.on('projection', function(msg) {
 	canvas.add(dot);
     }
     canvas.renderAll();
+    var arr = canvas.getObjects()
+    for (i = 0; i < arr.length; i++) arr[i].changed = false;
 });
 
 canvas = new fabric.Canvas('c1', { backgroundColor: "#000" });
@@ -31,9 +47,7 @@ socket.on('connect', function() {});
 socket.emit('init_projection', {});
 
 var i, dot,
-    getRandomInt = fabric.util.getRandomInt,
-    rainbow    = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"],
-    rainbowEnd = rainbow.length - 1;
+    rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"];
 
 results1 = document.getElementById('results-c1');
 
@@ -82,7 +96,7 @@ canvas.on('selection:created', function(e) {
 	}
     }
     
-    //console.log(datatable)
+    console.log("datatable");
     createTable(datatable);
 
     
@@ -101,14 +115,23 @@ canvas.on('object:selected', function(e) {
 	datatable.push(temp)
     }
     
+    console.log("datatable22");
     createTable(datatable);
 
     
 })
 
 canvas.on('object:modified', function(e) { 
-    socket.emit('get_projection', {'view':[]});
-    
+    if (canvas.getActiveGroup() != undefined){
+	var arr = canvas.getObjects()
+	for (i = 0; i < arr.length; i++){
+	    if (arr[i].active){
+		arr[i].changed = true;
+		console.log("C",arr[i]);
+	    }
+	}
+    }
+    else e.target.changed = true;
 });
 
 points = canvas._objects

@@ -6,7 +6,7 @@ from sklearn import datasets, linear_model
 def get_random_view():
 
     iris = datasets.load_iris()
-    data = 50*iris['data']
+    data = (1/10)*iris['data']
     labels = list(iris['target'])
 
     p = data.shape[1]
@@ -73,7 +73,7 @@ def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
     # might be redundant in this setting
     #prev_error = np.linalg.norm(sel_curr - sel_target, ord='fro')
 
-    print 'Begin train'
+    print('Begin train')
     # X coordinate
     X = sel_data
     y = sel_target[:,0]
@@ -88,7 +88,7 @@ def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
     #print new_proj_x[0].shape,  new_proj_y[0].shape
     proj =  np.vstack((new_proj_x[0],  new_proj_y[0])).T
 
-    print 'End train'
+    print('End train')
     approx_view = np.dot(data, proj)
     
     approx_view = np.column_stack((approx_view, labels))
@@ -243,7 +243,7 @@ def least_squares_lms(X, y, w, eta):
 
 def get_data():
     iris = datasets.load_iris()
-    data = 50*iris['data']
+    data = iris['data']
     labels = list(iris['target'])
     
     return {'data': data, 'labels': labels}

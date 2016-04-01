@@ -4,35 +4,50 @@ fabric.Object.prototype.hasControls = false;
 var old_view = [];
 
 function update_view(){
+    canvas.deactivateAll();
     var changed = [];
-    var view = [];
+    var view_objs = [];
     var arr = canvas.getObjects()
     for (i = 0; i < arr.length; i++){
 	if(arr[i].changed){
 	    changed.push(i);
-	    view.push([arr[i].getLeft(), arr[i].getTop()]);
+	    view_objs.push(arr[i]);
 	}
     }
     console.log(arr);
-    console.log(view);
-    socket.emit('get_projection', {'changed':changed,'view':view,'old':old_view});
+    console.log(view_objs);
+    socket.emit('get_projection', {'changed':changed,'view':get_normalised_coords(view_objs),'old':old_view});
+}
+
+function get_normalised_coords(objs){
+    var answer = [];
+    for(var i = 0; i < objs.length; i++){
+	answer.push([objs[i].getLeft()/canvas.width,objs[i].getTop()/canvas.height])
+    }
+    return answer;
+}
+
+function get_display_coords(x,y){
+    return [x*canvas.width,y*canvas.height];
 }
 
 var socket = io.connect('http://localhost:3797/elderberry');
 socket.on('projection', function(msg) {
     canvas.clear().renderAll();
     var data = msg['data'];
-    
+    console.log("DD", JSON.stringify(data));
     for (i = 0; i < data.length; i++) {
 
 	info_array.push(data[i][2])
+	coords = get_display_coords(data[i][0],data[i][1]);
 	dot = new fabric.Circle({
-	    left:   data[i][0],
-	    top:    data[i][1],
+	    left:   coords[0],
+	    top:    coords[1],
 	    radius: 9,
 	    fill:   rainbow[data[i][2]]
 	});
-
+	dot.setOriginX("center");
+	dot.setOriginY("center");
 	dot.hasControls = false;
 
 	canvas.add(dot);

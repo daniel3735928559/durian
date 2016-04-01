@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask.ext.socketio import SocketIO, emit
 import random
+import numpy as np
 from Algorithms import *
 
 app = Flask(__name__)
@@ -33,8 +34,21 @@ def test_message(message):
 
 @socketio.on('get_projection', namespace='/elderberry')
 def get_projection(message):
-    print(message)
-    emit('projection', {'data': [list(x) for x in get_random_view()]})
+
+    data = get_data()['data']
+    labels = get_data()['labels']
+    
+    selection = message['changed']
+    target = np.matrix(message['view'])
+    curr = np.matrix(message['old'])
+    
+    old_proj = None
+
+    print target
+    #abc = pursue_target_closed_from(target, curr, data, old_proj, selection, labels)
+    abc = get_random_view()
+    
+    emit('projection', {'data': [list(x) for x in abc]})
 
 @socketio.on('init_projection', namespace='/elderberry')
 def initial_projection(message):

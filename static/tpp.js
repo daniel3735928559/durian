@@ -4,16 +4,18 @@ fabric.Object.prototype.hasControls = false;
 var old_view = [];
 
 function update_view(){
+    var changed = [];
     var view = [];
     var arr = canvas.getObjects()
     for (i = 0; i < arr.length; i++){
 	if(arr[i].changed){
+	    changed.push(i);
 	    view.push([arr[i].getLeft(), arr[i].getTop()]);
 	}
     }
     console.log(arr);
     console.log(view);
-    socket.emit('get_projection', {'changed':view,'old':old_view});
+    socket.emit('get_projection', {'changed':changed,'view':view,'old':old_view});
 }
 
 var socket = io.connect('http://localhost:3797/elderberry');

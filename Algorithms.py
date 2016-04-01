@@ -17,10 +17,85 @@ def get_random_view():
     view = np.dot(data, proj)
 
     view = np.column_stack((view, labels))
-    
+
     return view
     
+def least_squares_optimized(X,y):
 
+    regr = linear_model.LinearRegression()
+    regr.fit(X, y)
+
+    w = regr.coef_[0].T
+    #print w
+    #for i, j in enumerate(X):
+    #    print y[i], np.dot(j,w)
+        
+    #print 'mean square error', np.linalg.norm(y - y_hat), '\n'
+    
+
+    return regr.coef_
+
+def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
+    '''
+    Args:
+    
+    * target    : the targetted view as decided by user
+    * curr      : the current view before user changes
+    * old_proj  : the old set of weights that generated current view
+    * selection : array of indices of points that have been moved
+    '''
+
+    MIN_VALUE = 1e-100
+    # no points have been changed; nothing to pursue
+    if len(selection) == 0:
+        return -1
+
+    # extract examples that have been moved
+    #sel_target = target[selection,:]
+    sel_target = target
+    #sel_curr = curr[selection, :]
+    sel_data = np.matrix(data[selection, :])
+
+    # n := number of examples
+    n = data.shape[0]
+    # p := number of features in big data set
+    p = data.shape[1]
+
+    # Calculate the Frobenius norm of the selected points of the matrix
+    # If that norm is < MIN_VALUE throw an exception
+    norm_target = np.linalg.norm(sel_target, ord='fro')
+    if norm_target < MIN_VALUE:
+        return -1
+
+    # this is a fancy way of saying L2 error on each coordinate separately
+    # and then add them up. :) my dumb brain figured this one out.
+    # get the frobenius norm of the difference between the target and current view
+    # might be redundant in this setting
+    #prev_error = np.linalg.norm(sel_curr - sel_target, ord='fro')
+
+    print 'Begin train'
+    # X coordinate
+    X = sel_data
+    y = sel_target[:,0]
+
+    new_proj_x = least_squares_optimized(X,y)
+
+    # Y coordinate
+    X = sel_data
+    y = sel_target[:,1]
+    new_proj_y = least_squares_optimized(X,y)
+
+    #print new_proj_x[0].shape,  new_proj_y[0].shape
+    proj =  np.vstack((new_proj_x[0],  new_proj_y[0])).T
+
+    print 'End train'
+    approx_view = np.dot(data, proj)
+    
+    approx_view = np.column_stack((approx_view, labels))
+
+    return approx_view
+    
+    
 def pursue_target_grad_descent(target, curr, data, old_proj, selection):
     '''
     Args:
@@ -164,15 +239,31 @@ def least_squares_lms(X, y, w, eta):
 
     return nw
 
-def least_squares_optimized(X,y):
-    regr = linear_model.LinearRegression()
-    regr.fit(X, y)
 
-    return regr.coef_
 
+def get_data():
+    iris = datasets.load_iris()
+    data = 50*iris['data']
+    labels = list(iris['target'])
+    
+    return {'data': data, 'labels': labels}
 
 if __name__ == '__main__':
-
-    print('Test')
     
-    v = get_random_view()
+    d = datasets.make_regression(n_samples=50, n_features=10, n_informative=10,\
+                    n_targets=2, bias=0.0, effective_rank=None, \
+                    tail_strength=0.5, noise=0.0, shuffle=True, \
+                    coef=False, random_state=None)
+
+    target = d[1]
+    data = d[0]
+
+    p = data.shape[1]
+    n = data.shape[0]
+
+    proj = np.random.rand(p,2)
+    curr = np.dot(data, proj)
+    
+    x = pursue_target_closed_from(target, curr, data, old_proj=None, selection=np.arange(1,10))
+    approx_view = np.dot(data, x)
+    

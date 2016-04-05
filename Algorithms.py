@@ -3,14 +3,26 @@ import numpy as np
 import math
 from sklearn import datasets, linear_model
 
+# a = [[0, 0, 1], [0, 0, 2], [0, 0, 3], [0, 10, 0], [11, 0, 0]]
+# labels = [0, 0 ,0, 1, 1]
+# data = np.array(a)
+
+iris = datasets.load_iris()
+data = (1/10)*iris['data']
+labels = list(iris['target'])
+
+p = data.shape[1]
+n = data.shape[0]
+
 def get_random_view():
 
-    iris = datasets.load_iris()
-    data = (1/10)*iris['data']
-    labels = list(iris['target'])
 
-    p = data.shape[1]
-    n = data.shape[0]
+    # iris = datasets.load_iris()
+    # data = (1/10)*iris['data']
+    # labels = list(iris['target'])
+
+    # p = data.shape[1]
+    # n = data.shape[0]
 
     proj = np.random.rand(p,2)
 
@@ -19,21 +31,39 @@ def get_random_view():
     view = np.column_stack((view, labels))
 
     return view
+
+'''
+
+
+    proj = np.random.rand(p,2)
+
+    view = np.dot(data, proj)
+    view = (0.9/np.max(view))*view
+
+    view = np.column_stack((view, labels))
+
+    return view
+    '''
     
 def least_squares_optimized(X,y):
 
     regr = linear_model.LinearRegression()
     regr.fit(X, y)
-
     w = regr.coef_[0].T
+
+    b = regr.intercept_[0]
     #print w
-    #for i, j in enumerate(X):
-    #    print y[i], np.dot(j,w)
+
+    #a = np.linalg.inv(np.dot(X.T, X))
+    #b = np.dot(X.T, y)
+
+    #w = np.dot(a,b)
+    # for i, j in enumerate(X):
+    #     print 'Error', y[i], np.dot(j,w)+ b
         
     #print 'mean square error', np.linalg.norm(y - y_hat), '\n'
     
-
-    return regr.coef_
+    return {'weight': regr.coef_, 'intercept': b}
 
 def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
     '''
@@ -61,36 +91,39 @@ def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
     # p := number of features in big data set
     p = data.shape[1]
 
-    # Calculate the Frobenius norm of the selected points of the matrix
-    # If that norm is < MIN_VALUE throw an exception
-    norm_target = np.linalg.norm(sel_target, ord='fro')
-    if norm_target < MIN_VALUE:
-        return -1
-
-    # this is a fancy way of saying L2 error on each coordinate separately
-    # and then add them up. :) my dumb brain figured this one out.
-    # get the frobenius norm of the difference between the target and current view
-    # might be redundant in this setting
-    #prev_error = np.linalg.norm(sel_curr - sel_target, ord='fro')
-
-    print('Begin train')
     # X coordinate
     X = sel_data
     y = sel_target[:,0]
-
-    new_proj_x = least_squares_optimized(X,y)
+    temp = least_squares_optimized(X,y)
+    new_proj_x = temp['weight'][0]
+    new_proj_int_x = temp['intercept']    
 
     # Y coordinate
     X = sel_data
     y = sel_target[:,1]
-    new_proj_y = least_squares_optimized(X,y)
 
-    #print new_proj_x[0].shape,  new_proj_y[0].shape
-    proj =  np.vstack((new_proj_x[0],  new_proj_y[0])).T
-
-    print('End train')
-    approx_view = np.dot(data, proj)
+    temp = least_squares_optimized(X,y)
+    new_proj_y = temp['weight'][0]
+    new_proj_int_y = temp['intercept']    
     
+    proj =  np.vstack((new_proj_x,  new_proj_y)).T
+    approx_view = np.dot(data, proj)
+
+    interecept_matrix_x = new_proj_int_x*np.ones(data.shape[0])
+    interecept_matrix_y = new_proj_int_y*np.ones(data.shape[0])
+    
+    intercept = np.vstack((interecept_matrix_x, interecept_matrix_y)).T
+
+    approx_view = approx_view + intercept
+
+    print np.matrix(target)
+    print '\n'
+    print approx_view
+
+    if math.fabs(approx_view.max()) > 1:
+        approx_view = (0.9/approx_view.max())*approx_view
+
+    #print approx_view
     approx_view = np.column_stack((approx_view, labels))
 
     return approx_view
@@ -242,9 +275,9 @@ def least_squares_lms(X, y, w, eta):
 
 
 def get_data():
-    iris = datasets.load_iris()
-    data = iris['data']
-    labels = list(iris['target'])
+    #iris = datasets.load_iris()
+    #data = iris['data']
+    #labels = list(iris['target'])
     
     return {'data': data, 'labels': labels}
 

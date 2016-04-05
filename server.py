@@ -44,7 +44,6 @@ def get_projection(message):
     
     old_proj = None
 
-    print(target)
     abc = pursue_target_closed_from(target, curr, data, old_proj, selection, labels)
     #abc = get_random_view()
     

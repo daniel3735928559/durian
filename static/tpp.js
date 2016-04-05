@@ -22,13 +22,13 @@ function update_view(){
 function get_normalised_coords(objs){
     var answer = [];
     for(var i = 0; i < objs.length; i++){
-	answer.push([objs[i].getLeft()/canvas.width,objs[i].getTop()/canvas.height])
+	answer.push([(objs[i].getLeft()-canvas.width/2)/(canvas.width/2),(objs[i].getTop()-canvas.height/2)/(canvas.height/2)])
     }
     return answer;
 }
 
 function get_display_coords(x,y){
-    return [x*canvas.width,y*canvas.height];
+    return [(x+1)*canvas.width/2,(y+1)*canvas.height/2];
 }
 
 var socket = io.connect('http://localhost:3797/elderberry');
@@ -49,7 +49,7 @@ socket.on('projection', function(msg) {
 	dot.setOriginX("center");
 	dot.setOriginY("center");
 	dot.hasControls = false;
-
+	dot.stringValue = data[i][2]
 	canvas.add(dot);
     }
     canvas.renderAll();
@@ -107,9 +107,10 @@ canvas.on('selection:created', function(e) {
     for(i in selected){
 	temp = []
 	index = canvas.getObjects().indexOf(selected[i])
-	desc = info_array[index]
+	// desc = info_array[index]
+	desc = selected[i].stringValue
 	if (index != -1){
-	    temp.push(i+1)
+	    temp.push(i)
 	    temp.push(index)
 	    temp.push(desc)
 	    datatable.push(temp)

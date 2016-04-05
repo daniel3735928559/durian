@@ -16,7 +16,6 @@ function createTable(tableData) {
 	    cell.appendChild(document.createTextNode(cellData));
 	    row.appendChild(cell);
 	});
-	
 	tableBody.appendChild(row);
     });
 
@@ -26,10 +25,4 @@ function createTable(tableData) {
 
 }
 
-//console.log(info_array)
-//data = [["Lionel Messi", "Rondaldo"], ["Ozil", "Zidane"]]
-//createTable(data);
-//data.push(["New stuff", "yayyy"])
-//createTable(data);
-//data.push(["New stuff", "yayyy"])
-//createTable(data);
+

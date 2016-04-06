@@ -38,8 +38,9 @@ socket.on('projection', function(msg) {
     console.log("DD", JSON.stringify(data));
     for (i = 0; i < data.length; i++) {
 
-	info_array.push(data[i][2])
+	info_array.push(data[i][3])
 	coords = get_display_coords(data[i][0],data[i][1]);
+	console.log(coords)
 	dot = new fabric.Circle({
 	    left:   coords[0],
 	    top:    coords[1],
@@ -52,7 +53,9 @@ socket.on('projection', function(msg) {
 	dot.stringValue = data[i][2]
 	canvas.add(dot);
     }
+
     canvas.renderAll();
+    
     var arr = canvas.getObjects()
     for (i = 0; i < arr.length; i++){
 	arr[i].changed = false;

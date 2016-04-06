@@ -7,13 +7,21 @@ from sklearn import datasets, linear_model
 # labels = [0, 0 ,0, 1, 1]
 # data = np.array(a)
 
-iris = datasets.load_iris()
-data = (1/10)*iris['data']
-labels = list(iris['target'])
+# iris = datasets.load_iris()
+# data = (1/10)*iris['data']
+# labels = list(iris['target'])
 
+
+#-----------------------------------------------------------
+data = np.load('language.npy')
 p = data.shape[1]
 n = data.shape[0]
 
+data = (0.9/np.max(data))*data
+labels = np.zeros(n)
+
+desc = list(np.load('description.npy'))
+#------------------------------------------------------------
 def get_random_view():
 
 
@@ -30,6 +38,9 @@ def get_random_view():
 
     view = np.column_stack((view, labels))
 
+    #view = np.column_stack((view, desc))
+    #print view
+    
     return view
 
 '''

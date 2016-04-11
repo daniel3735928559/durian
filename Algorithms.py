@@ -2,10 +2,23 @@ from __future__ import division
 import numpy as np
 import math
 from sklearn import datasets, linear_model
+from Utils import *
 
-# a = [[0, 0, 1], [0, 0, 2], [0, 0, 3], [0, 10, 0], [11, 0, 0]]
-# labels = [0, 0 ,0, 1, 1]
-# data = np.array(a)
+a = [[0, 0, 1], [0, 0, 2], [0, 0, 3], [0, 10, 0], [11, 0, 0]]
+labels = [0, 0 ,0, 1, 1]
+data = np.array(a)
+
+X = load_data('DATA/emotional_words_vectors')
+X = np.array(X)
+
+desc = list(X[:,0])
+
+
+A = X[:,1:].astype(float)
+
+n,p = A.shape
+data = A
+labels = np.zeros(n)
 
 # iris = datasets.load_iris()
 # data = (1/10)*iris['data']
@@ -13,15 +26,16 @@ from sklearn import datasets, linear_model
 
 
 #-----------------------------------------------------------
-data = np.load('language.npy')
+# data = np.load('language.npy')
+
+# data = (0.9/np.max(data))*data
+# labels = np.zeros(n)
+
+# desc = list(np.load('description.npy'))
+#------------------------------------------------------------
 p = data.shape[1]
 n = data.shape[0]
 
-data = (0.9/np.max(data))*data
-labels = np.zeros(n)
-
-desc = list(np.load('description.npy'))
-#------------------------------------------------------------
 def get_random_view():
 
 
@@ -36,11 +50,12 @@ def get_random_view():
 
     view = np.dot(data, proj)
 
+    view = 0.9/np.max(view)*view
+    
     view = np.column_stack((view, labels))
 
     #view = np.column_stack((view, desc))
-    #print view
-    
+    #print view    
     return view
 
 '''

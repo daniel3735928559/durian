@@ -14,8 +14,8 @@ function update_view(){
 	    view_objs.push(arr[i]);
 	}
     }
-    console.log(arr);
-    console.log(view_objs);
+    //console.log(arr);
+    //console.log(view_objs);
     socket.emit('get_projection', {'changed':changed,'view':get_normalised_coords(view_objs),'old':old_view});
 }
 
@@ -35,22 +35,23 @@ var socket = io.connect('http://localhost:3797/elderberry');
 socket.on('projection', function(msg) {
     canvas.clear().renderAll();
     var data = msg['data'];
-    console.log("DD", JSON.stringify(data));
+    //console.log("DD", JSON.stringify(data));
     for (i = 0; i < data.length; i++) {
 
-	info_array.push(data[i][3])
+	info_array.push(data[i][2])
 	coords = get_display_coords(data[i][0],data[i][1]);
-	console.log(coords)
+	//console.log(coords)
 	dot = new fabric.Circle({
 	    left:   coords[0],
 	    top:    coords[1],
 	    radius: 9,
-	    fill:   rainbow[data[i][2]]
+	    fill:   rainbow[data[i][2]] //rainbow[data[i][2]
 	});
 	dot.setOriginX("center");
 	dot.setOriginY("center");
 	dot.hasControls = false;
-	dot.stringValue = data[i][2]
+	dot.stringValue = 'Lionel Messi'
+	dot.label = data[i][2]
 	canvas.add(dot);
     }
 
@@ -145,7 +146,8 @@ canvas.on('object:selected', function(e) {
     
 })
 
-canvas.on('object:modified', function(e) { 
+canvas.on('object:modified', function(e) {
+    // only group selection works right now)
     if (canvas.getActiveGroup() != undefined){
 	var arr = canvas.getObjects()
 	for (i = 0; i < arr.length; i++){

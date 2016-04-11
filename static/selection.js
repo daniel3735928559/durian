@@ -12,7 +12,8 @@ function myFunction(label_class) {
 	    selection.push(obj)
 	}	
     }
-    	group = new fabric.Group(selection);
+    group = new fabric.Group(selection,{originX: 'center', originY:'center'});
+    
 	console.log(selection.length)
 	canvas.setActiveGroup(group).renderAll()
 	//canvas.setActiveObject(selection);

@@ -108,7 +108,7 @@ canvas.on('object:moving', function(e) {
 
 canvas.on('selection:created', function(e) {
     selected = e.target._objects
-    console.log("s",JSON.stringify(selected));
+    //console.log("s",JSON.stringify(selected));
     datatable = []
     for(i in selected){
 	temp = []
@@ -123,27 +123,48 @@ canvas.on('selection:created', function(e) {
 	}
     }
     
-    console.log("datatable1212",JSON.stringify(datatable));
-    createTable(datatable);
+    //console.log("datatable1212",JSON.stringify(datatable));
+    //createTable(datatable);
     angular.element(document.getElementById('c1')).scope().set_selection(datatable);
 })
 
 canvas.on('object:selected', function(e) { 
 
     datatable = []
-    temp = []
-    index = canvas.getObjects().indexOf(e.target)
-    desc = info_array[index]
-    if (index != -1){
-	temp.push(i+1)
-	temp.push(index)
-	temp.push(desc)
-	datatable.push(temp)
+    //console.log("button select",JSON.stringify(e));
+    if (canvas.getActiveGroup() != undefined){
+	var arr = canvas.getObjects()
+	for (i = 0; i < arr.length; i++){
+	    if (arr[i].active){
+		temp = []
+		index = canvas.getObjects().indexOf(arr[i])
+		desc = info_array[index]		
+		temp.push(i+1)
+		temp.push(index)
+		temp.push(desc)
+		datatable.push(temp)
+	    }
+	}
+
     }
-    
-    console.log("datatable22",JSON.stringify(datatable));
-    createTable(datatable);
+    else{
+
+	temp = []
+	index = canvas.getObjects().indexOf(e.target)
+	desc = info_array[index]
+	if (index != -1){
+	    temp.push(i+1)
+	    temp.push(index)
+	    temp.push(desc)
+	    datatable.push(temp)
+	}
+	
+
+    }
+    console.log("object selected",JSON.stringify(datatable));
+    //createTable(datatable);
     angular.element(document.getElementById('c1')).scope().set_selection(datatable);
+    
 })
 
 canvas.on('object:modified', function(e) {
@@ -153,7 +174,7 @@ canvas.on('object:modified', function(e) {
 	for (i = 0; i < arr.length; i++){
 	    if (arr[i].active){
 		arr[i].changed = true;
-		console.log("C",arr[i]);
+		//console.log("C",arr[i]);
 	    }
 	}
     }

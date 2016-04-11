@@ -44,10 +44,10 @@ def get_projection(message):
     
     old_proj = None
 
-    abc = pursue_target_closed_from(target, curr, data, old_proj, selection, labels)
+    view,desc = pursue_target_closed_from(target, curr, data, old_proj, selection, labels)
     #abc = get_random_view()
     
-    emit('projection', {'data': [list(x) for x in abc]})
+    emit('projection', {'data': [list(view[i])+[desc[i]] for i in range(len(view))]})
 
 @socketio.on('init_projection', namespace='/elderberry')
 def initial_projection(message):

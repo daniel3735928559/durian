@@ -152,7 +152,7 @@ def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
     #print approx_view
     approx_view = np.column_stack((approx_view, labels))
 
-    return approx_view
+    return approx_view,desc
     
     
 def pursue_target_grad_descent(target, curr, data, old_proj, selection):

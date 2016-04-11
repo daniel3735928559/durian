@@ -24,7 +24,7 @@
 
       table tr:nth-child(even) {
       background-color: #ffffff;
-      }
+      
     </style>
 </head>
 <body ng-app="app">
@@ -38,7 +38,8 @@
     </div>
 
     <div>
-      <div ng-repeat="d in data">
+      <input type="text" ng-model="data_filter" />
+      <div ng-repeat="d in data | filter:{2:data_filter}">
 	{{d[0]}} {{d[1]}} {{d[2]}}
       </div>
     </div>

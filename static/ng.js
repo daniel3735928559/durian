@@ -3,6 +3,7 @@ var app = angular.module('app',[]);
 app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout', '$location', function($scope, $http, $window, $timeout, $location){    
     //alert('q');
     $scope.data = {};
+    $scope.data_filter = "";
     //$scope.helloz = 'qweqweqweq';
     // $scope.$on('canvas:created', function(){
     // 	console.log('qweqqw');

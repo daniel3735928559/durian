@@ -1,14 +1,16 @@
 <!DOCTYPE html>
+<html>
 <head>
     <meta charset="utf-8">
     <title>DURIAN</title>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.1.0/fabric.all.min.js" ></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-
-    <script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.4.8/fabric.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular.min.js'></script>
+    <!-- <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script> -->
+    <script type="text/javascript" src="static/ng.js"></script>    
+    
     <style>
       table, th , td {
       border: 1px solid grey;
@@ -24,18 +26,24 @@
       background-color: #ffffff;
       }
     </style>
-          
+</head>
+<body ng-app="app">
+  {% raw %}
+  <div id="super" ng-controller="ElderberryController">
     <div id="wrapper">
 	<div id="results-c1">View</div><br />
+	<p>this: {{helloz}}</p>
+	ksjdbcjsdh
 	<div style="cursor:pointer;border:1px solid black;padding:5px;" onclick="update_view()" id="results-c1">Update</div>
 	<br />
 	<canvas id="c1" width="800" height="400"></canvas>
     </div>
 
-
-    <script type="text/javascript" src="static/table.js"></script>    
-    <script type="text/javascript" src="static/tpp.js"></script>
-    <script type="text/javascript" src="static/selection.js"></script>
+    <div>
+      <div ng-repeat="d in data">
+	{{d[0]}} {{d[1]}} {{d[2]}}
+      </div>
+    </div>
     
     <div>
       <button onclick="myFunction(0)">Click me</button>
@@ -43,6 +51,11 @@
     <div>
       <button onclick="myFunction(2)">Click me</button>
     </div>
-
-    
+  </div>
+  <script type="text/javascript" src="static/table.js"></script>
+  <script type="text/javascript" src="static/tpp.js"></script>
+  <script type="text/javascript" src="static/selection.js"></script>
+  
+  {% endraw %}
+</body>
 </html>

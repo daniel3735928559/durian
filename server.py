@@ -51,7 +51,9 @@ def get_projection(message):
 
 @socketio.on('init_projection', namespace='/elderberry')
 def initial_projection(message):
-    emit('projection', {'data': [list(x) for x in get_random_view()]})
+    print('asd')
+    view,desc = get_random_view()
+    emit('projection', {'data': [list(view[i])+[desc[i]] for i in range(len(view))]})
 
 @socketio.on('my broadcast event', namespace='/elderberry')
 def test_message(message):
@@ -68,4 +70,4 @@ def test_disconnect():
 
 if __name__ == '__main__':
     app.debug=True
-    socketio.run(app,port=3797)
+    socketio.run(app,host='0.0.0.0',port=3797)

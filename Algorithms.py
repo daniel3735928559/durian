@@ -10,7 +10,7 @@ data = np.array(a)
 
 X = load_data('DATA/emotional_words_vectors')
 X = np.array(X)
-
+print(X)
 desc = list(X[:,0])
 
 
@@ -55,8 +55,8 @@ def get_random_view():
     view = np.column_stack((view, labels))
 
     #view = np.column_stack((view, desc))
-    #print view    
-    return view
+    print(view)
+    return view,desc
 
 '''
 
@@ -142,9 +142,9 @@ def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
 
     approx_view = approx_view + intercept
 
-    print np.matrix(target)
-    print '\n'
-    print approx_view
+    print(np.matrix(target))
+    print('\n')
+    print(approx_view)
 
     if math.fabs(approx_view.max()) > 1:
         approx_view = (0.9/approx_view.max())*approx_view

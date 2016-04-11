@@ -10,7 +10,7 @@ def save_data(data, filename):
     filename: The name of the file we want to save it as
     
     """
-    f = open(filename,'w')
+    f = open(filename,'wb')
     pickle.dump(data,f)
     f.close()
     
@@ -22,7 +22,7 @@ def load_data(filename):
     Args:
     filename: The name of the file to load from
     """
-    f = open(filename,'r')
+    f = open(filename,'rb')
     data = pickle.load(f)
     f.close()
     return data

@@ -31,14 +31,16 @@ function get_display_coords(x,y){
     return [(x+1)*canvas.width/2,(y+1)*canvas.height/2];
 }
 
-var socket = io.connect('http://localhost:3797/elderberry');
+var loc = 'http://' + window.location.hostname + ':' + window.location.port+'/elderberry';
+console.log(loc);
+var socket = io.connect(loc);
 socket.on('projection', function(msg) {
     canvas.clear().renderAll();
     var data = msg['data'];
     //console.log("DD", JSON.stringify(data));
     for (i = 0; i < data.length; i++) {
 
-	info_array.push(data[i][2])
+	info_array.push(data[i][3])
 	coords = get_display_coords(data[i][0],data[i][1]);
 	//console.log(coords)
 	dot = new fabric.Circle({
@@ -50,7 +52,7 @@ socket.on('projection', function(msg) {
 	dot.setOriginX("center");
 	dot.setOriginY("center");
 	dot.hasControls = false;
-	dot.stringValue = 'Lionel Messi'
+	dot.stringValue = data[i][3];
 	dot.label = data[i][2]
 	canvas.add(dot);
     }
@@ -104,9 +106,9 @@ canvas.on('object:moving', function(e) {
     animate(e, 1);
 });
 
-canvas.on('selection:created', function(e) { 
-
-    selected = e.target.objects
+canvas.on('selection:created', function(e) {
+    selected = e.target._objects
+    console.log("s",JSON.stringify(selected));
     datatable = []
     for(i in selected){
 	temp = []
@@ -121,10 +123,9 @@ canvas.on('selection:created', function(e) {
 	}
     }
     
-    console.log("datatable");
+    console.log("datatable1212",JSON.stringify(datatable));
     createTable(datatable);
-
-    
+    angular.element(document.getElementById('c1')).scope().set_selection(datatable);
 })
 
 canvas.on('object:selected', function(e) { 
@@ -140,10 +141,9 @@ canvas.on('object:selected', function(e) {
 	datatable.push(temp)
     }
     
-    console.log("datatable22");
+    console.log("datatable22",JSON.stringify(datatable));
     createTable(datatable);
-
-    
+    angular.element(document.getElementById('c1')).scope().set_selection(datatable);
 })
 
 canvas.on('object:modified', function(e) {

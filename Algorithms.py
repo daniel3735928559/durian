@@ -4,47 +4,39 @@ import math
 from sklearn import datasets, linear_model
 from Utils import *
 
-a = [[0, 0, 1], [0, 0, 2], [0, 0, 3], [0, 10, 0], [11, 0, 0]]
-labels = [0, 0 ,0, 1, 1]
-data = np.array(a)
+
+# a = [[0, 0, 1], [0, 0, 2], [0, 0, 3], [0, 10, 0], [11, 0, 0]]
+# labels = [0, 0 ,0, 1, 1]
+# data = np.array(a)
 
 X = load_data('DATA/emotional_words_vectors')
 X = np.array(X)
 print(X)
 desc = list(X[:,0])
 
+#------------DATA scraped from that website----------------
+# A = X[:,1:].astype(float)
 
-A = X[:,1:].astype(float)
-
-n,p = A.shape
-data = A
-labels = np.zeros(n)
-
-# iris = datasets.load_iris()
-# data = (1/10)*iris['data']
-# labels = list(iris['target'])
-
-
-#-----------------------------------------------------------
-# data = np.load('language.npy')
-
-# data = (0.9/np.max(data))*data
+# n,p = A.shape
+# data = A
 # labels = np.zeros(n)
 
-# desc = list(np.load('description.npy'))
-#------------------------------------------------------------
+
+#------------Work with ben--------------------------------
+data = np.load('DATA/language.npy')
+
+data = (0.9/np.max(data))*data
 p = data.shape[1]
 n = data.shape[0]
 
+labels = np.zeros(n)
+
+desc = list(np.load('DATA/description.npy'))
+
+#------------------------------------------------------------
+
 def get_random_view():
 
-
-    # iris = datasets.load_iris()
-    # data = (1/10)*iris['data']
-    # labels = list(iris['target'])
-
-    # p = data.shape[1]
-    # n = data.shape[0]
 
     proj = np.random.rand(p,2)
 

@@ -31,6 +31,10 @@ def test_message(message):
     print(x,y)
     emit('update', {'centroid': [x,y]})
 
+    
+@socketio.on('label_change', namespace='/elderberry')
+def label_change(message):
+    labels[message['index']] = message['label']
 
 @socketio.on('get_projection', namespace='/elderberry')
 def get_projection(message):
@@ -46,7 +50,7 @@ def get_projection(message):
 
     view,desc = pursue_target_closed_from(target, curr, data, old_proj, selection, labels)
     #abc = get_random_view()
-    
+    print('THINGY2')
     emit('projection', {'data': [list(view[i])+[desc[i]] for i in range(len(view))]})
 
 @socketio.on('init_projection', namespace='/elderberry')

@@ -4,6 +4,8 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
     //alert('q');
     $scope.data = {};
     $scope.data_filter = "";
+    $scope.classes = ["sad","hally"];
+    $scope.rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"];
     //$scope.helloz = 'qweqweqweq';
     // $scope.$on('canvas:created', function(){
     // 	console.log('qweqqw');
@@ -12,6 +14,14 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
 	console.log("DATA",data);
 	$scope.data = data;
 	$scope.$apply();
+    }
+    $scope.class_change = function(table_index, class_index, data_index){
+	var arr = canvas.getObjects();
+	arr[data_index].label = class_index;
+	arr[data_index].fill = $scope.rainbow[class_index];
+	$scope.data[table_index][0] = class_index;
+	canvas.renderAll();
+	socket.emit('label_change', {'index':data_index,'label':class_index});
     }
 }]);
 

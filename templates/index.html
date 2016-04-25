@@ -23,20 +23,37 @@
   {% raw %}
   <div id="super" ng-controller="ElderberryController" class="container">
     
+    <div class="row">
+      <canvas id="c1" width="1000" height="600" class="col-sm-12"></canvas>      
+    </div>
+
     <div id="wrapper" class="row">
-	<div class="col-sm-4" style="cursor:pointer;border:1px solid black;padding:5px;" onclick="update_view()" id="results-c1">Update</div>
+	<div class="col-sm-1" style="cursor:pointer;border:1px solid black;padding:5px;" onclick="update_view()" id="results-c1">Update</div>
     </div>
-
-    <div class="row">
-      <canvas id="c1" width="1000" height="600" class="col-sm-8"></canvas>      
+    
+    <div class="row" ng-if="data.length > 0">
+      <span class="col-sm-2">Filter: </span>
+      <input type="text" ng-model="$parent.data_filter" class="col-sm-2"/>
     </div>
-
-    <div class="row">
-      <input type="text" ng-model="data_filter" class="col-sm-12"/>
-    </div>
-
-    <div  ng-repeat="d in data | filter:{2:data_filter}">
-      {{d[0]}} {{d[1]}} {{d[2]}}		
+    
+    <div class="row" style="padding:10px;"
+	 ng-repeat="d in data | filter:{2:data_filter} track by $index">
+      <!-- <div class="col-sm-1">{{d[0]}}</div> -->
+      <!-- <div class="col-sm-1">{{d[1]}}</div> -->
+      <div class="col-sm-1">{{d[2]}}</div>
+      <div class="col-sm-3">
+	<span ng-repeat="c in classes track by $index">
+	  <span ng-style="{'margin':'10px',
+			  'padding':'5px',
+			  'border-width':'2px',
+			  'border-style':'solid',
+			  'border-color':d[0] == $index ? 'blue' : 'black',
+			'background-color':rainbow[$index],'cursor':'pointer'}"
+		ng-click="class_change($parent.$index,$index,d[1])"> {{c}}
+	  </span>
+	</span>
+      </div>
+      <br />
     </div>
         
     <div class="row">

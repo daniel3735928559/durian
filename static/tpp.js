@@ -5,6 +5,7 @@ var old_view = [];
 
 function update_view(){
     canvas.deactivateAll();
+    console.log("THINGY");
     var changed = [];
     var view_objs = [];
     var arr = canvas.getObjects()
@@ -14,6 +15,7 @@ function update_view(){
 	    view_objs.push(arr[i]);
 	}
     }
+    console.log(changed);
     //console.log(arr);
     //console.log(view_objs);
     socket.emit('get_projection', {'changed':changed,'view':get_normalised_coords(view_objs),'old':old_view});
@@ -34,6 +36,7 @@ function get_display_coords(x,y){
 var loc = 'http://' + window.location.hostname + ':' + window.location.port+'/elderberry';
 console.log(loc);
 var socket = io.connect(loc);
+
 socket.on('projection', function(msg) {
     canvas.clear().renderAll();
     var data = msg['data'];
@@ -72,8 +75,7 @@ var info_array = []
 socket.on('connect', function() {});
 socket.emit('init_projection', {});
 
-var i, dot,
-    rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"];
+var i, dot, rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"];
 
 results1 = document.getElementById('results-c1');
 
@@ -107,6 +109,7 @@ canvas.on('object:moving', function(e) {
 });
 
 canvas.on('selection:created', function(e) {
+    console.log("selection creatiuans");
     selected = e.target._objects
     //console.log("s",JSON.stringify(selected));
     datatable = []
@@ -116,7 +119,7 @@ canvas.on('selection:created', function(e) {
 	// desc = info_array[index]
 	desc = selected[i].stringValue
 	if (index != -1){
-	    temp.push(i)
+	    temp.push(canvas.getObjects()[index].label)
 	    temp.push(index)
 	    temp.push(desc)
 	    datatable.push(temp)
@@ -129,6 +132,7 @@ canvas.on('selection:created', function(e) {
 })
 
 canvas.on('object:selected', function(e) { 
+    console.log("objecoeije selekcjbeiufr");
 
     datatable = []
     //console.log("button select",JSON.stringify(e));
@@ -139,7 +143,7 @@ canvas.on('object:selected', function(e) {
 		temp = []
 		index = canvas.getObjects().indexOf(arr[i])
 		desc = info_array[index]		
-		temp.push(i+1)
+		temp.push(arr[i].label)
 		temp.push(index)
 		temp.push(desc)
 		datatable.push(temp)
@@ -153,7 +157,7 @@ canvas.on('object:selected', function(e) {
 	index = canvas.getObjects().indexOf(e.target)
 	desc = info_array[index]
 	if (index != -1){
-	    temp.push(i+1)
+	    temp.push(canvas.getObjects()[index].label)
 	    temp.push(index)
 	    temp.push(desc)
 	    datatable.push(temp)

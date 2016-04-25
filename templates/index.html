@@ -3,8 +3,10 @@
 <head>
     <meta charset="utf-8">
     <title>DURIAN</title>
-    <script src="//d3js.org/d3.v3.min.js"></script>
     
+    <script src="//d3js.org/d3.v3.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="static/dash_style.css">    
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>    
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -16,29 +18,12 @@
     <!-- <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script> -->
     <script type="text/javascript" src="static/ng.js"></script>
 
-    
-    <style>
-      table, th , td {
-      border: 1px solid grey;
-      border-collapse: collapse;
-      padding: 5px;
-      }
-
-      table tr:nth-child(odd) {
-      background-color: #f2f2f2;
-      }
-
-      table tr:nth-child(even) {
-      background-color: #ffffff;
-      
-    </style>
 </head>
 <body ng-app="app">
   {% raw %}
   <div id="super" ng-controller="ElderberryController" class="container">
-
+    
     <div id="wrapper" class="row">
-	<!-- <div id="results-c1">View</div><br /> -->
 	<div class="col-sm-4" style="cursor:pointer;border:1px solid black;padding:5px;" onclick="update_view()" id="results-c1">Update</div>
     </div>
 
@@ -50,26 +35,26 @@
       <input type="text" ng-model="data_filter" class="col-sm-12"/>
     </div>
 
-
     <div  ng-repeat="d in data | filter:{2:data_filter}">
       {{d[0]}} {{d[1]}} {{d[2]}}		
     </div>
         
     <div class="row">
       <!-- <button class="col-sm-1" onclick="myFunction(2)">Click me</button> -->
-      <div class="col-sm-4" id="pie">  </div>
-      <div class="col-sm-8"id="bar">  </div>
+      <div class="col-sm-3"id="pie">  </div>
+      <div class="col-sm-4"id="bar">  </div>
+
     </div>
-
-
-
+    
   </div>
 
+  
   <!-- <script type="text/javascript" src="static/table.js"></script> -->
   <script type="text/javascript" src="static/tpp.js"></script>
   <script type="text/javascript" src="static/selection.js"></script>
-  <script type="text/javascript" src="static/pie.js"></script>
- <script type="text/javascript" src="static/bar.js"></script>            
+  <!-- <script type="text/javascript" src="static/pie.js"></script> -->
+  <!-- <script type="text/javascript" src="static/bar.js"></script> -->
+  <script type="text/javascript" src="static/dashboard.js"></script>              
   {% endraw %}
 </body>
 </html>

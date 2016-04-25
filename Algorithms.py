@@ -65,12 +65,18 @@ def get_random_view():
     
 def least_squares_optimized(X,y):
 
-    regr = linear_model.LinearRegression()
-    regr.fit(X, y)
-    w = regr.coef_[0].T
+    lasso = linear_model.Lasso(alpha=0.01)
+    lasso.fit(X,y)
+    w = lasso.coef_
+    b = lasso.intercept_[0]
+    print w
+    print b
 
-    b = regr.intercept_[0]
-    #print w
+    # regr = linear_model.LinearRegression()
+    # regr.fit(X, y)
+    # w = regr.coef_[0].T
+    # b = regr.intercept_[0]
+    # print regr.coef_
 
     #a = np.linalg.inv(np.dot(X.T, X))
     #b = np.dot(X.T, y)
@@ -80,8 +86,9 @@ def least_squares_optimized(X,y):
     #     print 'Error', y[i], np.dot(j,w)+ b
         
     #print 'mean square error', np.linalg.norm(y - y_hat), '\n'
-    
-    return {'weight': regr.coef_, 'intercept': b}
+
+    return {'weight': lasso.coef_, 'intercept': b}
+    # return {'weight': regr.coef_[0], 'intercept': b}
 
 def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
     '''
@@ -113,7 +120,7 @@ def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
     X = sel_data
     y = sel_target[:,0]
     temp = least_squares_optimized(X,y)
-    new_proj_x = temp['weight'][0]
+    new_proj_x = temp['weight']
     new_proj_int_x = temp['intercept']    
 
     # Y coordinate
@@ -121,7 +128,7 @@ def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
     y = sel_target[:,1]
 
     temp = least_squares_optimized(X,y)
-    new_proj_y = temp['weight'][0]
+    new_proj_y = temp['weight']
     new_proj_int_y = temp['intercept']    
     
     proj =  np.vstack((new_proj_x,  new_proj_y)).T

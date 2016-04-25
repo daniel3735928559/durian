@@ -16,6 +16,8 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.4.8/fabric.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular.min.js"></script>
     <!-- <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script> -->
+    <script type="text/javascript" src="static/selection.js"></script>
+    <script type="text/javascript" src="static/dashboard.js"></script>               
     <script type="text/javascript" src="static/ng.js"></script>
 
 </head>
@@ -29,19 +31,37 @@
 
     <div id="wrapper" class="row">
 	<div class="col-sm-1" style="cursor:pointer;border:1px solid black;padding:5px;" onclick="update_view()" id="results-c1">Update</div>
-	<div class="col-sm-4">Toggle train with all:
+	<div class="col-sm-2">Train with all:
 	  <div ng-click="toggle_train_all()"
 	  ng-style="{
 		    'background-color':train_all ? 'green' : 'red', 
 		    'border-radius':'10px','width':'20px','height':'20px',
-		    'cursor':'pointer'}"></div>
+		    'cursor':'pointer'}">
+	  </div>
 	</div>
+
+	<div class="col-sm-2">Lasso
+	  <div ng-click="toggle_lasso()"
+	  ng-style="{
+		    'background-color':lasso ? 'green' : 'red', 
+		    'border-radius':'10px','width':'20px','height':'20px',
+		    'cursor':'pointer'}">
+	  </div>
+	</div>	
+    </div>
+
+    <div class="row">
+      <!-- <button class="col-sm-1" onclick="myFunction(2)">Click me</button> -->
+      <div class="col-sm-3"id="pie">  </div>
+      <div class="col-sm-4"id="bar">  </div>
+
     </div>
     
     <div class="row" ng-if="data.length > 0">
       <span class="col-sm-2">Filter: </span>
       <input type="text" ng-model="$parent.data_filter" class="col-sm-2"/>
     </div>
+
     
     <div class="row" style="padding:10px;"
 	 ng-repeat="d in data | filter:{2:data_filter} track by $index">
@@ -63,22 +83,14 @@
       <br />
     </div>
         
-    <div class="row">
-      <!-- <button class="col-sm-1" onclick="myFunction(2)">Click me</button> -->
-      <div class="col-sm-3"id="pie">  </div>
-      <div class="col-sm-4"id="bar">  </div>
-
-    </div>
     
   </div>
 
-  
-  <!-- <script type="text/javascript" src="static/table.js"></script> -->
+
   <script type="text/javascript" src="static/tpp.js"></script>
-  <script type="text/javascript" src="static/selection.js"></script>
   <!-- <script type="text/javascript" src="static/pie.js"></script> -->
   <!-- <script type="text/javascript" src="static/bar.js"></script> -->
-  <script type="text/javascript" src="static/dashboard.js"></script>              
+ 
   {% endraw %}
 </body>
 </html>

@@ -39,17 +39,17 @@ def label_change(message):
 @socketio.on('get_projection', namespace='/elderberry')
 def get_projection(message):
 
-    data = get_data()['data']
-    labels = get_data()['labels']
+    data = get_data()['data'] # actual data
+    labels = get_data()['labels'] # classes 
     
-    selection = message['changed']
-    target = np.matrix(message['view'])
-    curr = np.matrix(message['old'])
+    selection = message['changed'] # indices of data that have been changed
+    target = np.matrix(message['view']) # final view of data
+    curr = np.matrix(message['old']) # current view of data
     
-    old_proj = None
+    lasso = message['lasso']
+    
+    view,desc = pursue_target_closed_from(target, curr, data, selection, labels, lasso)
 
-    view,desc = pursue_target_closed_from(target, curr, data, old_proj, selection, labels)
-    #abc = get_random_view()
     print('THINGY2')
     emit('projection', {'data': [list(view[i])+[desc[i]] for i in range(len(view))]})
 

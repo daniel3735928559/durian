@@ -5,10 +5,6 @@ from sklearn import datasets, linear_model
 from Utils import *
 
 
-# a = [[0, 0, 1], [0, 0, 2], [0, 0, 3], [0, 10, 0], [11, 0, 0]]
-# labels = [0, 0 ,0, 1, 1]
-# data = np.array(a)
-
 X = load_data('DATA/emotional_words_vectors')
 X = np.array(X)
 print(X)
@@ -63,21 +59,28 @@ def get_random_view():
     return view
     '''
     
-def least_squares_optimized(X,y):
+def least_squares_optimized(X,y, lasso):
 
-    lasso = linear_model.Lasso(alpha=0.01)
-    lasso.fit(X,y)
-    w = lasso.coef_
-    b = lasso.intercept_[0]
-    print w
-    print b
+    if lasso:
+        lasso = linear_model.Lasso(alpha=0.01)
+        lasso.fit(X,y)
+        w = lasso.coef_
+        b = lasso.intercept_[0]
+        #print w
+        #print b
+        
+        return {'weight': w, 'intercept': b}
 
-    # regr = linear_model.LinearRegression()
-    # regr.fit(X, y)
-    # w = regr.coef_[0].T
-    # b = regr.intercept_[0]
-    # print regr.coef_
+    else:
+        
+        regr = linear_model.LinearRegression()
+        regr.fit(X, y)
+        w = regr.coef_[0]
+        b = regr.intercept_[0]
+        print regr.coef_
 
+        return {'weight': regr.coef_[0], 'intercept': b}
+    
     #a = np.linalg.inv(np.dot(X.T, X))
     #b = np.dot(X.T, y)
 
@@ -87,10 +90,10 @@ def least_squares_optimized(X,y):
         
     #print 'mean square error', np.linalg.norm(y - y_hat), '\n'
 
-    return {'weight': lasso.coef_, 'intercept': b}
-    # return {'weight': regr.coef_[0], 'intercept': b}
 
-def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
+
+
+def pursue_target_closed_from(target, curr, data, selection, labels, lasso):
     '''
     Args:
     
@@ -98,8 +101,9 @@ def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
     * curr      : the current view before user changes
     * old_proj  : the old set of weights that generated current view
     * selection : array of indices of points that have been moved
+    * lasso: flag for lasso or regular least squares
     '''
-
+    
     MIN_VALUE = 1e-100
     # no points have been changed; nothing to pursue
     if len(selection) == 0:
@@ -119,7 +123,7 @@ def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
     # X coordinate
     X = sel_data
     y = sel_target[:,0]
-    temp = least_squares_optimized(X,y)
+    temp = least_squares_optimized(X,y, lasso)
     new_proj_x = temp['weight']
     new_proj_int_x = temp['intercept']    
 
@@ -127,7 +131,7 @@ def pursue_target_closed_from(target, curr, data, old_proj, selection, labels):
     X = sel_data
     y = sel_target[:,1]
 
-    temp = least_squares_optimized(X,y)
+    temp = least_squares_optimized(X,y, lasso)
     new_proj_y = temp['weight']
     new_proj_int_y = temp['intercept']    
     

@@ -5,10 +5,10 @@ var old_view = [];
 
 function update_view(){
     canvas.deactivateAll();
-    console.log("THINGY");
     var changed = [];
     var view_objs = [];
     var arr = canvas.getObjects()
+    
     if(angular.element(document.getElementById('c1')).scope().train_all){
 	for (i = 0; i < arr.length; i++){
 	    changed.push(i);
@@ -23,10 +23,10 @@ function update_view(){
 	    }
 	}
     }
-    console.log(changed);
+    // console.log(changed);
     //console.log(arr);
-    //console.log(view_objs);
-    socket.emit('get_projection', {'changed':changed,'view':get_normalised_coords(view_objs),'old':old_view});
+    lasso_flag = angular.element(document.getElementById('c1')).scope().lasso 
+    socket.emit('get_projection', {'changed':changed,'view':get_normalised_coords(view_objs),'old':old_view, 'lasso': lasso_flag});
 }
 
 function get_normalised_coords(objs){
@@ -74,7 +74,12 @@ socket.on('projection', function(msg) {
     for (i = 0; i < arr.length; i++){
 	arr[i].changed = false;
 	old_view.push([arr[i].getLeft(), arr[i].getTop()]);
+	dist[classes[arr[i].label]] += 1 
     }
+    for(i in dist){
+	dataset.push({category: i, measure: dist[i]})
+    }
+    dsPieChart(dataset);
 });
 
 canvas = new fabric.Canvas('c1', { backgroundColor: "#000" });
@@ -83,7 +88,11 @@ var info_array = []
 socket.on('connect', function() {});
 socket.emit('init_projection', {});
 
-var i, dot, rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"];
+
+var i, dot, rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"], classes = ["sad","happy"], dist={}, dataset=[];
+for (i in classes){
+    dist[classes[i]] = 0
+}
 
 results1 = document.getElementById('results-c1');
 
@@ -117,7 +126,7 @@ canvas.on('object:moving', function(e) {
 });
 
 canvas.on('selection:created', function(e) {
-    console.log("selection creatiuans");
+    //console.log("selection creatiuans");
     selected = e.target._objects
     //console.log("s",JSON.stringify(selected));
     datatable = []
@@ -140,7 +149,7 @@ canvas.on('selection:created', function(e) {
 })
 
 canvas.on('object:selected', function(e) { 
-    console.log("objecoeije selekcjbeiufr");
+    //console.log("objecoeije selekcjbeiufr");
 
     datatable = []
     //console.log("button select",JSON.stringify(e));
@@ -173,7 +182,7 @@ canvas.on('object:selected', function(e) {
 	
 
     }
-    console.log("object selected",JSON.stringify(datatable));
+    //console.log("object selected",JSON.stringify(datatable));
     //createTable(datatable);
     angular.element(document.getElementById('c1')).scope().set_selection(datatable);
     
@@ -195,3 +204,7 @@ canvas.on('object:modified', function(e) {
 
 points = canvas._objects
 info = info_array
+
+
+for(var i=0; i < points.length; i++){
+}

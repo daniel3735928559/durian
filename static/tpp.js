@@ -9,10 +9,18 @@ function update_view(){
     var changed = [];
     var view_objs = [];
     var arr = canvas.getObjects()
-    for (i = 0; i < arr.length; i++){
-	if(arr[i].changed){
+    if(angular.element(document.getElementById('c1')).scope().train_all){
+	for (i = 0; i < arr.length; i++){
 	    changed.push(i);
 	    view_objs.push(arr[i]);
+	}
+    }
+    else{
+	for (i = 0; i < arr.length; i++){
+	    if(arr[i].changed){
+		changed.push(i);
+		view_objs.push(arr[i]);
+	    }
 	}
     }
     console.log(changed);

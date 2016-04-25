@@ -4,6 +4,7 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
     //alert('q');
     $scope.data = {};
     $scope.data_filter = "";
+    $scope.train_all = true;
     $scope.classes = ["sad","hally"];
     $scope.rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"];
     //$scope.helloz = 'qweqweqweq';
@@ -14,6 +15,9 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
 	console.log("DATA",data);
 	$scope.data = data;
 	$scope.$apply();
+    }
+    $scope.toggle_train_all = function(){
+	$scope.train_all = !$scope.train_all;
     }
     $scope.class_change = function(table_index, class_index, data_index){
 	var arr = canvas.getObjects();

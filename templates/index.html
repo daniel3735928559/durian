@@ -50,13 +50,15 @@
 	  </div>
 	</div>	
     </div>
-
+    <br>
+    
     <div class="row">
       <!-- <button class="col-sm-1" onclick="myFunction(2)">Click me</button> -->
       <div class="col-sm-3" id="pie">  </div>
       <div class="col-sm-4" id="bar">  </div>
 
     </div>
+
     
     <div class="row" ng-if="data.length > 0">
       <span class="col-sm-2">Filter: </span>
@@ -67,7 +69,7 @@
     <div class="row" style="padding:10px;"
 	 ng-repeat="d in data | filter:{2:data_filter} track by $index">
       <!-- <div class="col-sm-1">{{d[0]}}</div> -->
-      <!-- <div class="col-sm-1">{{d[1]}}</div> -->
+      <div class="col-sm-1">{{d[1]}}</div>
       <div class="col-sm-1">{{d[2]}}</div>
       <div class="col-sm-3">
 	<span ng-repeat="c in classes track by $index">

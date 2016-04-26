@@ -5,29 +5,32 @@ from sklearn import datasets, linear_model
 from Utils import *
 
 
+
+#------------DATA scraped from that website----------------
 X = load_data('DATA/emotional_words_vectors')
 X = np.array(X)
 
-desc = list(X[:,0])
-
-#------------DATA scraped from that website----------------
-# A = X[:,1:].astype(float)
-
-# n,p = A.shape
-# data = A
-# labels = np.zeros(n)
+filt = [1, 14, 16, 27, 30, 7, 40, 48, 33, 5]
+A = X[:,1:].astype(float)[filt]
+desc = list(X[filt,0])
+print A.shape
+n,p = A.shape
 
 
-#------------Work with ben--------------------------------
-data = np.load('DATA/language.npy')
-
-data = (0.9/np.max(data))*data
-p = data.shape[1]
-n = data.shape[0]
-
+data = A
 labels = np.zeros(n)
 
-desc = list(np.load('DATA/description.npy'))
+# hacked up description
+
+#------------Work with ben--------------------------------
+# data = np.load('DATA/language.npy')
+
+# data = (0.9/np.max(data))*data
+# p = data.shape[1]
+# n = data.shape[0]
+
+# labels = np.zeros(n)
+# desc = list(np.load('DATA/description.npy'))
 
 #------------------------------------------------------------
 

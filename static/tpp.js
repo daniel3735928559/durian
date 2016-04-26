@@ -46,7 +46,6 @@ function update_view(){
     //------------------BAR CHART--------------
     bar_data = []
     for(i in ranking){
-	console.log(ranking[i])
 	bar_data.push({"letter": ranking[i][0], "frequency": ranking[i][1]})
     }
     

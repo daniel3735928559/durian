@@ -8,7 +8,7 @@ function myFunction(label_class) {
 
 	if(obj.label == label_class){
 	    // console.log(canvas._objects[i])
-	    obj.active = true
+	    //obj.active = true
 	    selection.push(obj)
 	}	
     }

@@ -28,7 +28,7 @@ def test_message(message):
         sz += 1
     x /= sz
     y /= sz
-    print(x,y)
+    #print(x,y)
     emit('update', {'centroid': [x,y]})
 
     
@@ -48,16 +48,16 @@ def get_projection(message):
     
     lasso = message['lasso']
     
-    view,desc = pursue_target_closed_from(target, curr, data, selection, labels, lasso)
+    view,desc, rank = pursue_target_closed_from(target, curr, data, selection, labels, lasso)
 
-    print('THINGY2')
-    emit('projection', {'data': [list(view[i])+[desc[i]] for i in range(len(view))]})
+    emit('projection', {'data': [list(view[i])+[desc[i]] for i in range(len(view))],\
+                        'ranking': [list(rank[i]) for i in range(len(rank))]})
 
 @socketio.on('init_projection', namespace='/elderberry')
 def initial_projection(message):
     print('asd')
-    view,desc = get_random_view()
-    emit('projection', {'data': [list(view[i])+[desc[i]] for i in range(len(view))]})
+    view,desc, imp = get_random_view()
+    emit('projection', {'data': [list(view[i])+[desc[i]] for i in range(len(view))], 'ranking': [imp[i] for i in range(len(imp))]})
 
 @socketio.on('my broadcast event', namespace='/elderberry')
 def test_message(message):

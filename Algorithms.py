@@ -7,7 +7,7 @@ from Utils import *
 
 X = load_data('DATA/emotional_words_vectors')
 X = np.array(X)
-print(X)
+
 desc = list(X[:,0])
 
 #------------DATA scraped from that website----------------
@@ -42,22 +42,13 @@ def get_random_view():
     
     view = np.column_stack((view, labels))
 
-    #view = np.column_stack((view, desc))
-    print(view)
-    return view,desc
+    imp = feature_importance(proj)
 
-'''
+    ranking = np.argsort(imp)[::-1]
+    values = np.sort(imp)[::-1]
 
+    return view,desc, zip(ranking, values)[:20]
 
-    proj = np.random.rand(p,2)
-
-    view = np.dot(data, proj)
-    view = (0.9/np.max(view))*view
-
-    view = np.column_stack((view, labels))
-
-    return view
-    '''
     
 def least_squares_optimized(X,y, lasso):
 
@@ -66,8 +57,6 @@ def least_squares_optimized(X,y, lasso):
         lasso.fit(X,y)
         w = lasso.coef_
         b = lasso.intercept_[0]
-        #print w
-        #print b
         
         return {'weight': w, 'intercept': b}
 
@@ -77,22 +66,10 @@ def least_squares_optimized(X,y, lasso):
         regr.fit(X, y)
         w = regr.coef_[0]
         b = regr.intercept_[0]
-        print regr.coef_
 
-        return {'weight': regr.coef_[0], 'intercept': b}
+        return {'weight': w, 'intercept': b}
+
     
-    #a = np.linalg.inv(np.dot(X.T, X))
-    #b = np.dot(X.T, y)
-
-    #w = np.dot(a,b)
-    # for i, j in enumerate(X):
-    #     print 'Error', y[i], np.dot(j,w)+ b
-        
-    #print 'mean square error', np.linalg.norm(y - y_hat), '\n'
-
-
-
-
 def pursue_target_closed_from(target, curr, data, selection, labels, lasso):
     '''
     Args:
@@ -145,9 +122,9 @@ def pursue_target_closed_from(target, curr, data, selection, labels, lasso):
 
     approx_view = approx_view + intercept
 
-    print(np.matrix(target))
-    print('\n')
-    print(approx_view)
+    # print(np.matrix(target))
+    # print('\n')
+    # print(approx_view)
 
     if math.fabs(approx_view.max()) > 1:
         approx_view = (0.9/approx_view.max())*approx_view
@@ -155,9 +132,18 @@ def pursue_target_closed_from(target, curr, data, selection, labels, lasso):
     #print approx_view
     approx_view = np.column_stack((approx_view, labels))
 
-    return approx_view,desc
-    
-    
+    importance = feature_importance(proj)
+
+    ranking = np.argsort(importance)[::-1]
+    values = np.sort(importance)[::-1]
+
+    return approx_view,desc, zip(ranking, values)[:20]
+
+def feature_importance(proj):
+
+    temp = [np.linalg.norm(i) for i in proj]
+    return temp
+
 def pursue_target_grad_descent(target, curr, data, old_proj, selection):
     '''
     Args:

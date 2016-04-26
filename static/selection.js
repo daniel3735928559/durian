@@ -13,7 +13,7 @@ function myFunction(label_class) {
 	}	
     }
     group = new fabric.Group(selection,{originX: 'center', originY:'center'});    
-	console.log(selection.length)
+	//console.log(selection.length)
 	canvas.setActiveGroup(group).renderAll()
 	//canvas.setActiveObject(selection);
 }

@@ -23,10 +23,40 @@ function update_view(){
 	    }
 	}
     }
-    // console.log(changed);
-    //console.log(arr);
+
+    var arr = canvas.getObjects();
+
+    // for (i in classes){
+    // 	dist[classes[i]] = 0
+    // }
+
+    // for (i = 0; i < arr.length; i++){
+    // 	dist[classes[arr[i].label]] += 1 
+    // }
+
+    dataset = []
+    // console.log(dist)
+    // for(i in dist){
+    // 	dataset.push({category: i, measure: dist[i]})
+    // }
+
+    d3.selectAll("svg").remove();
+    dsPieChart(dataset);
+
+    //------------------BAR CHART--------------
+    bar_data = []
+    for(i in ranking){
+	console.log(ranking[i])
+	bar_data.push({"letter": ranking[i][0], "frequency": ranking[i][1]})
+    }
+    
+    make_bar_chart(bar_data)
+    //--------------------------------------------------------
+    
     lasso_flag = angular.element(document.getElementById('c1')).scope().lasso 
     socket.emit('get_projection', {'changed':changed,'view':get_normalised_coords(view_objs),'old':old_view, 'lasso': lasso_flag});
+
+
 }
 
 function get_normalised_coords(objs){
@@ -42,12 +72,14 @@ function get_display_coords(x,y){
 }
 
 var loc = 'http://' + window.location.hostname + ':' + window.location.port+'/elderberry';
-console.log(loc);
+
 var socket = io.connect(loc);
 
 socket.on('projection', function(msg) {
     canvas.clear().renderAll();
     var data = msg['data'];
+    ranking = msg['ranking']
+
     //console.log("DD", JSON.stringify(data));
     for (i = 0; i < data.length; i++) {
 
@@ -69,7 +101,8 @@ socket.on('projection', function(msg) {
     }
 
     canvas.renderAll();
-    
+
+    //---------------------PIE CHART-------------------
     var arr = canvas.getObjects()
     for (i = 0; i < arr.length; i++){
 	arr[i].changed = false;
@@ -79,7 +112,19 @@ socket.on('projection', function(msg) {
     for(i in dist){
 	dataset.push({category: i, measure: dist[i]})
     }
+
+    d3.selectAll("svg").remove();
     dsPieChart(dataset);
+    //-------------------------------------------------
+
+    //---------------------BAR CHART-------------------    
+    bar_data = []
+    for(i in ranking){
+	bar_data.push({"letter": ranking[i][0], "frequency": ranking[i][1]})
+    }
+
+    make_bar_chart(bar_data)
+    //-------------------------------------------------    
 });
 
 canvas = new fabric.Canvas('c1', { backgroundColor: "#000" });
@@ -88,14 +133,15 @@ var info_array = []
 socket.on('connect', function() {});
 socket.emit('init_projection', {});
 
+//-------------------------------------GLOBALS------------------
+var rankingi, dot, rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"], classes = ["sad","happy"], dist={}, dataset=[], bar_data=[];
 
-var i, dot, rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"], classes = ["sad","happy"], dist={}, dataset=[];
 for (i in classes){
     dist[classes[i]] = 0
 }
 
 results1 = document.getElementById('results-c1');
-
+//-------------------------------------------------------------
 function animate(e, dir) {
     if (e.target) {
 	fabric.util.animate({

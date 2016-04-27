@@ -28,8 +28,10 @@ function dsPieChart(dataset){
 	// for animation
 	innerRadiusFinal = outerRadius * .5,
 	innerRadiusFinal3 = outerRadius* .45,
-	color = d3.scale.category20()    //builtin range of colors
-    ;
+	color = d3.scale.category20();//builtin range of colors;
+
+    var rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"];
+    console.log(color)
     
     var vis = d3.select("#pie")
 	.append("svg:svg")              
@@ -64,7 +66,7 @@ function dsPieChart(dataset){
 
     arcs.append("svg:path")
 	.attr("fill", function(d, i) {
-	    return color(i);  //set the color for each slice to be chosen from the color function defined above
+	    return rainbow[i];  //set the color for each slice to be chosen from the color function defined above
 	})
 	.attr("d", arc)     //this creates the actual SVG path using the associated data (pie) with the arc drawing function
 	.append("svg:title") //mouseover title showing the figures

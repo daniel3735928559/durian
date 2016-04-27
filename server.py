@@ -51,13 +51,16 @@ def get_projection(message):
     view,desc, rank = pursue_target_closed_from(target, curr, data, selection, labels, lasso)
 
     emit('projection', {'data': [list(view[i])+[desc[i]] for i in range(len(view))],\
-                        'ranking': [list(rank[i]) for i in range(len(rank))]})
+                        'ranking': [[int(rank[i][0]),float(rank[i][1])] for i in range(len(rank))]})
 
 @socketio.on('init_projection', namespace='/elderberry')
 def initial_projection(message):
     print('asd')
     view,desc, imp = get_random_view()
-    emit('projection', {'data': [list(view[i])+[desc[i]] for i in range(len(view))], 'ranking': [imp[i] for i in range(len(imp))]})
+    data = [list(view[i])+[desc[i]] for i in range(len(view))]
+    ranking = [[int(imp[i][0]),float(imp[i][1])] for i in range(len(imp))]
+    print(data, ranking)
+    emit('projection', {'data': data, 'ranking': ranking})
 
 @socketio.on('my broadcast event', namespace='/elderberry')
 def test_message(message):

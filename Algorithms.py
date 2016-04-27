@@ -47,7 +47,7 @@ def get_random_view():
     ranking = np.argsort(imp)[::-1]
     values = np.sort(imp)[::-1]
 
-    return view,desc, zip(ranking, values)[:20]
+    return view,desc, list(zip(ranking, values))[:20]
 
     
 def least_squares_optimized(X,y, lasso):
@@ -137,7 +137,7 @@ def pursue_target_closed_from(target, curr, data, selection, labels, lasso):
     ranking = np.argsort(importance)[::-1]
     values = np.sort(importance)[::-1]
 
-    return approx_view,desc, zip(ranking, values)[:20]
+    return approx_view,desc, list(zip(ranking, values))[:20]
 
 def feature_importance(proj):
 

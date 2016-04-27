@@ -2,6 +2,7 @@ fabric.Object.prototype.transparentCorners = false;
 fabric.Object.prototype.hasControls = false;
 
 var old_view = [];
+var rainbow = ["#ffffff"];
 
 function update_view(){
     canvas.deactivateAll();
@@ -88,17 +89,17 @@ socket.on('projection', function(msg) {
 	dot = new fabric.Circle({
 	    left:   coords[0],
 	    top:    coords[1],
-	    radius: 9,
+	    radius: 10,
 	    fill:   rainbow[data[i][2]] //rainbow[data[i][2]
 	});
 	dot.setOriginX("center");
 	dot.setOriginY("center");
 	dot.hasControls = false;
 	dot.stringValue = data[i][3];
-	dot.label = data[i][2]
+	dot.label = data[i][2];
 	canvas.add(dot);
     }
-
+    canvas.calcOffset();
     canvas.renderAll();
 
     //---------------------PIE CHART-------------------
@@ -133,8 +134,9 @@ socket.on('connect', function() {});
 socket.emit('init_projection', {});
 
 //-------------------------------------GLOBALS------------------
-classes = ["positive-intense","postive-mellow", "negative-intense", "negative-mellow"];
-var rankingi, dot, rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"], dist={}, dataset=[], bar_data=[];
+classes = ["unknown","positive-intense","postive-mellow", "negative-intense", "negative-mellow"];
+rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666","#6c6cfc"];
+var rankingi, dot, dist={}, dataset=[], bar_data=[];
 
 for (i in classes){
     dist[classes[i]] = 0
@@ -196,7 +198,7 @@ canvas.on('selection:created', function(e) {
 
 canvas.on('object:selected', function(e) { 
     //console.log("objecoeije selekcjbeiufr");
-
+    rainbow = angular.element(document.getElementById('c1')).scope().rainbow
     datatable = []
     //console.log("button select",JSON.stringify(e));
     if (canvas.getActiveGroup() != undefined){
@@ -252,5 +254,5 @@ points = canvas._objects
 info = info_array
 
 
-for(var i=0; i < points.length; i++){
-}
+// for(var i=0; i < points.length; i++){
+// }

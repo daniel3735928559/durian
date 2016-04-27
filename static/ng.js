@@ -6,8 +6,8 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
     $scope.data_filter = "";
     $scope.train_all = true;
     $scope.lasso = true
-    $scope.classes = ["positive-intense","postive-mellow", "negative-intense", "negative-mellow"];
-    $scope.rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"];
+    $scope.classes = ["unknown","positive-intense","postive-mellow", "negative-intense", "negative-mellow"];
+    $scope.rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666","#6c6cfc"];
 
     
     $scope.set_selection = function(data){

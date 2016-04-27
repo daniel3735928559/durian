@@ -11,16 +11,13 @@ X = load_data('DATA/emotional_words_vectors')
 X = np.array(X)
 
 filt = [1, 14, 16, 27, 30, 7, 40, 48, 33, 5]
-A = X[:,1:].astype(float)[filt]
-desc = list(X[filt,0])
-print A.shape
+A = np.load('DATA/extreme_positve_negative.npy')
+desc = load_data('DATA/extreme_positive_negative_description')
 n,p = A.shape
 
 
 data = A
 labels = np.zeros(n)
-
-# hacked up description
 
 #------------Work with ben--------------------------------
 # data = np.load('DATA/language.npy')

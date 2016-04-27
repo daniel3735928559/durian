@@ -133,7 +133,8 @@ socket.on('connect', function() {});
 socket.emit('init_projection', {});
 
 //-------------------------------------GLOBALS------------------
-var rankingi, dot, rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"], classes = ["sad","happy"], dist={}, dataset=[], bar_data=[];
+classes = ["positive-intense","postive-mellow", "negative-intense", "negative-mellow"];
+var rankingi, dot, rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"], dist={}, dataset=[], bar_data=[];
 
 for (i in classes){
     dist[classes[i]] = 0

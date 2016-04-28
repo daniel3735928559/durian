@@ -15,7 +15,6 @@ A = np.load('DATA/extreme_positve_negative.npy')
 desc = load_data('DATA/extreme_positive_negative_description')
 n,p = A.shape
 
-
 data = A
 labels = np.zeros(n)
 
@@ -49,28 +48,30 @@ def get_random_view():
 
     return view,desc, list(zip(ranking, values))[:20]
 
+
+
+def alg_lasso(X,y,alpha):
+    print("lasso!",alpha)
+    lasso = linear_model.Lasso(alpha=alpha)
+    lasso.fit(X,y)
+    w = lasso.coef_
+    b = lasso.intercept_[0]
     
-def least_squares_optimized(X,y, lasso):
-
-    if lasso:
-        lasso = linear_model.Lasso(alpha=0.01)
-        lasso.fit(X,y)
-        w = lasso.coef_
-        b = lasso.intercept_[0]
-        
-        return {'weight': w, 'intercept': b}
-
-    else:
-        
-        regr = linear_model.LinearRegression()
-        regr.fit(X, y)
-        w = regr.coef_[0]
-        b = regr.intercept_[0]
-
-        return {'weight': w, 'intercept': b}
+    return {'weight': w, 'intercept': b}
+    
+def alg_least_squares_optimized(X,y,params):
+    print("regression")
 
     
-def pursue_target_closed_from(target, curr, data, selection, labels, lasso):
+    regr = linear_model.LinearRegression()
+    regr.fit(X, y)
+    w = regr.coef_[0]
+    b = regr.intercept_[0]
+
+    return {'weight': w, 'intercept': b}
+
+    
+def pursue_target_closed_from(target, curr, data, selection, labels, alg, params):
     '''
     Args:
     
@@ -100,7 +101,8 @@ def pursue_target_closed_from(target, curr, data, selection, labels, lasso):
     # X coordinate
     X = sel_data
     y = sel_target[:,0]
-    temp = least_squares_optimized(X,y, lasso)
+    
+    temp = algs[alg](X,y,params)
     new_proj_x = temp['weight']
     new_proj_int_x = temp['intercept']    
 
@@ -108,7 +110,7 @@ def pursue_target_closed_from(target, curr, data, selection, labels, lasso):
     X = sel_data
     y = sel_target[:,1]
 
-    temp = least_squares_optimized(X,y, lasso)
+    temp = algs[alg](X,y, params)
     new_proj_y = temp['weight']
     new_proj_int_y = temp['intercept']    
     
@@ -295,6 +297,10 @@ def get_data():
     #labels = list(iris['target'])
     
     return {'data': data, 'labels': labels}
+
+
+algs = {"lasso":alg_lasso,
+        "regression":alg_least_squares_optimized}
 
 if __name__ == '__main__':
     

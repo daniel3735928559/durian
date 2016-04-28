@@ -4,19 +4,22 @@ fabric.Object.prototype.hasControls = false;
 var old_view = [];
 var rainbow = ["#ffffff"];
 
+prev_view = null;
+current_view = null;
+
 function update_view(){
     canvas.deactivateAll();
     var changed = [];
     var view_objs = [];
     var arr = canvas.getObjects()
-    
-    if(angular.element(document.getElementById('c1')).scope().train_all){
+    var method = angular.element(document.getElementById('c1')).scope().training_method;
+    if(method == "all"){
 	for (i = 0; i < arr.length; i++){
 	    changed.push(i);
 	    view_objs.push(arr[i]);
 	}
     }
-    else{
+    else if(method == "changed"){
 	for (i = 0; i < arr.length; i++){
 	    if(arr[i].changed){
 		changed.push(i);
@@ -46,15 +49,15 @@ function update_view(){
 
     //------------------BAR CHART--------------
     bar_data = []
-    for(i in ranking){
-	bar_data.push({"letter": ranking[i][0], "frequency": ranking[i][1]})
+    for(i in current_view.ranking){
+	bar_data.push({"letter": current_view.ranking[i][0], "frequency": current_view.ranking[i][1]})
     }
     
     make_bar_chart(bar_data)
     //--------------------------------------------------------
     
     lasso_flag = angular.element(document.getElementById('c1')).scope().lasso 
-    socket.emit('get_projection', {'changed':changed,'view':get_normalised_coords(view_objs),'old':old_view, 'lasso': lasso_flag});
+    socket.emit('get_projection', {'changed':changed,'view':get_normalised_coords(view_objs),'old':old_view, 'algorithm': angular.element(document.getElementById('c1')).scope().selected_alg, 'params':angular.element(document.getElementById('c1')).scope().get_params()});
 
 
 }
@@ -75,11 +78,16 @@ var loc = 'http://' + window.location.hostname + ':' + window.location.port+'/el
 
 var socket = io.connect(loc);
 
-socket.on('projection', function(msg) {
-    canvas.clear().renderAll();
-    var data = msg['data'];
-    ranking = msg['ranking']
+function previous_view(){
+    if(prev_view){
+	set_view(prev_view.data,prev_view.ranking);
+    }
+}
 
+function set_view(data, ranking){
+    prev_view = current_view;
+    current_view = {'data':data,'ranking':ranking}
+    canvas.clear().renderAll();
     //console.log("DD", JSON.stringify(data));
     for (i = 0; i < data.length; i++) {
 
@@ -99,7 +107,6 @@ socket.on('projection', function(msg) {
 	dot.label = data[i][2];
 	canvas.add(dot);
     }
-    canvas.calcOffset();
     canvas.renderAll();
 
     //---------------------PIE CHART-------------------
@@ -125,6 +132,11 @@ socket.on('projection', function(msg) {
 
     make_bar_chart(bar_data)
     //-------------------------------------------------    
+    
+}
+
+socket.on('projection', function(msg) {
+    set_view(msg['data'],msg['ranking'])
 });
 
 canvas = new fabric.Canvas('c1', { backgroundColor: "#000" });

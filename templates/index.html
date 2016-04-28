@@ -29,30 +29,44 @@
     <!-- <div class="row"> -->
     <!--   <canvas id="c1" width="1000" height="600" class="col-sm-12"></canvas>       -->
     <!-- </div> -->
+    <br />
     <div class="row">
-      <canvas id="c1" width="1000" height="600"></canvas>
+      <canvas id="c1" width="600" height="400"></canvas>
     </div>
-    
+    <br />
     <div id="wrapper" class="row">
-	<div class="col-sm-1" style="cursor:pointer;border:1px solid black;padding:5px;" onclick="update_view()" id="results-c1">Update</div>
-	<div class="col-sm-2">Train with all:
-	  <div ng-click="toggle_train_all()"
-	  ng-style="{
-		    'background-color':train_all ? 'green' : 'red', 
-		    'border-radius':'10px','width':'20px','height':'20px',
-		    'cursor':'pointer'}">
+      <div class="col-sm-2" style="cursor:pointer;border:1px solid black;padding:5px;" onclick="update_view()">Update view</div>
+    </div>
+    <div id="wrapper" class="row">
+      <div class="col-sm-2" style="cursor:pointer;border:1px solid black;padding:5px;" onclick="previous_view()">Previous view</div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-sm-2">Select training set:</div>
+      
+      <div class="col-sm-9">
+	<div ng-repeat="a in training_methods">
+	  <div ng-style="{'border-width':training_method == a ? '2px' :
+			 '1px', 'border-color':training_method == a ? 'blue' :
+			 'gray', 'border-style':'solid','cursor':'pointer'}" class="col-sm-3" ng-click="set_train(a)">{{a}}
 	  </div>
 	</div>
-
-	<div class="col-sm-2">Lasso
-	  <div ng-click="toggle_lasso()"
-	  ng-style="{
-		    'background-color':lasso ? 'green' : 'red', 
-		    'border-radius':'10px','width':'20px','height':'20px',
-		    'cursor':'pointer'}">
-	  </div>
-	</div>	
+      </div>
     </div>
+    <div class="row">
+      <div class="col-sm-2">Select algorithm: </div>
+      <div class="col-sm-9">
+	<div ng-repeat="a in algorithms">
+	  <div ng-style="{'border-width':selected_alg == a ? '2px' :
+			 '1px', 'border-color':selected_alg == a ? 'blue' :
+			 'gray', 'border-style':'solid','cursor':'pointer'}" class="col-sm-3" ng-click="set_alg(a)">{{a}}
+	    <span ng-if="a == 'lasso'">(lambda:
+	      <input ng-model="$parent.$parent.lasso_param" style="width:50px;height:20px;" />)</span>
+	  </div>
+	</div>
+      </div>
+      
+    </div>	
     <br>
     
     <div class="row">

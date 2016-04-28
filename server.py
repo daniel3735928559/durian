@@ -46,9 +46,10 @@ def get_projection(message):
     target = np.matrix(message['view']) # final view of data
     curr = np.matrix(message['old']) # current view of data
     
-    lasso = message['lasso']
+    alg = message['algorithm']
+    params = message['params']
     
-    view,desc, rank = pursue_target_closed_from(target, curr, data, selection, labels, lasso)
+    view,desc, rank = pursue_target_closed_from(target, curr, data, selection, labels, alg, params)
 
     emit('projection', {'data': [list(view[i])+[desc[i]] for i in range(len(view))],\
                         'ranking': [[int(rank[i][0]),float(rank[i][1])] for i in range(len(rank))]})

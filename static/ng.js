@@ -4,24 +4,32 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
     //alert('q');
     $scope.data = {};
     $scope.data_filter = "";
-    $scope.train_all = true;
-    $scope.lasso = true
+    $scope.algorithms = ["regression","lasso"]
+    $scope.lasso_param = 0.01;
+    $scope.selected_alg = $scope.algorithms[0];
     $scope.classes = ["unknown","positive-intense","postive-mellow", "negative-intense", "negative-mellow"];
+    $scope.training_methods = ["all","changed"];
+    $scope.training_method = $scope.training_methods[0];
     $scope.rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666","#6c6cfc"];
 
-    
+    $scope.get_params = function(){
+	if($scope.selected_alg == "regression")
+	    return 0;
+	if($scope.selected_alg == "lasso")
+	    return parseFloat($scope.lasso_param);
+    }
+    $scope.set_alg = function(a){
+	$scope.selected_alg = a;
+    }
+    $scope.set_train = function(a){
+	$scope.training_method = a;
+	console.log($scope.lasso_param);
+    }
     $scope.set_selection = function(data){
 	//console.log("DATA",data);
 	$scope.data = data;
 	$scope.$apply();
     }
-    $scope.toggle_train_all = function(){
-	$scope.train_all = !$scope.train_all;
-    }
-    $scope.toggle_lasso = function(){
-	$scope.lasso = !$scope.lasso;
-    }
-
     
     $scope.class_change = function(table_index, class_index, data_index){
 	var arr = canvas.getObjects();

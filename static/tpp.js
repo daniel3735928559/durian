@@ -80,7 +80,7 @@ var socket = io.connect(loc);
 
 function previous_view(){
     if(prev_view){
-	set_view(prev_view.data,prev_view.ranking);
+	set_view(prev_view.data, prev_view.ranking);
     }
 }
 
@@ -116,10 +116,12 @@ function set_view(data, ranking){
 	old_view.push([arr[i].getLeft(), arr[i].getTop()]);
 	dist[classes[arr[i].label]] += 1 
     }
+    dataset = []
     for(i in dist){
 	dataset.push({category: i, measure: dist[i]})
     }
 
+    
     d3.selectAll("svg").remove();
     dsPieChart(dataset);
     //-------------------------------------------------

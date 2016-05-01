@@ -60,7 +60,7 @@ def initial_projection(message):
     view,desc, imp = get_random_view()
     data = [list(view[i])+[desc[i]] for i in range(len(view))]
     ranking = [[int(imp[i][0]),float(imp[i][1])] for i in range(len(imp))]
-    print(data, ranking)
+    #print(data, ranking)
     emit('projection', {'data': data, 'ranking': ranking})
 
 @socketio.on('my broadcast event', namespace='/elderberry')

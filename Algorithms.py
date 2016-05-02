@@ -7,37 +7,25 @@ from make_fake_blog import make_data
 
 
 #------------DATA scraped from that works----------------
-# X = load_data('DATA/emotional_words_vectors')
-# X = np.array(X)
+X = load_data('DATA/emotional_words_vectors')
+X = np.array(X)
 
-# A = np.load('DATA/extreme_positve_negative.npy')
-# desc = load_data('DATA/extreme_positive_negative_description')
-# n,p = A.shape
+A = np.load('DATA/extreme_positve_negative.npy')
+desc = load_data('DATA/extreme_positive_negative_description')
+n,p = A.shape
 
-# data = A
-# labels = np.zeros(n)
+data = A
+labels = np.zeros(n)
 
 #---------Fake blog data--------------------------------
-make_data('DATA/fake_blog_data_III', class_choice=True)
+# make_data('DATA/fake_blog_data_III', class_choice=True)
 
-data = np.load('DATA/blog_data.npy')
-n,p = data.shape
-labels = load_data('DATA/labels_blog_data')
-#labels = np.zeros(n)
-desc = load_data('DATA/description_blog_data')
+# data = np.load('DATA/blog_data.npy')
+# n,p = data.shape
+# labels = load_data('DATA/labels_blog_data')
+# #labels = np.zeros(n)
+# desc = load_data('DATA/description_blog_data')
 
-
-#------------Work with ben--------------------------------
-# data = np.load('DATA/language.npy')
-
-# data = (0.9/np.max(data))*data
-# p = data.shape[1]
-# n = data.shape[0]
-
-# labels = np.zeros(n)
-# desc = list(np.load('DATA/description.npy'))
-
-#------------------------------------------------------------
 
 def get_random_view():
 
@@ -138,7 +126,7 @@ def pursue_target_closed_from(target, curr, data, selection, labels, alg, params
     # print(approx_view)
 
     if math.fabs(approx_view.max()) > 1 or math.fabs(approx_view.min()) > 1:
-        approx_view = (0.9/approx_view.max())*approx_view
+        approx_view = (0.9/np.max([math.fabs(approx_view.max()), math.fabs(approx_view.min())]))*approx_view
 
             
     print(approx_view)

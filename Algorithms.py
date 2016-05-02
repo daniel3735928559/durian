@@ -18,12 +18,14 @@ from make_fake_blog import make_data
 # labels = np.zeros(n)
 
 #---------Fake blog data--------------------------------
-make_data('DATA/fake_blog_data_II', class_choice=True)
+make_data('DATA/fake_blog_data_III', class_choice=True)
 
 data = np.load('DATA/blog_data.npy')
-labels = load_data('DATA/labels_blog_data')
-desc = load_data('DATA/description_blog_data')
 n,p = data.shape
+labels = load_data('DATA/labels_blog_data')
+#labels = np.zeros(n)
+desc = load_data('DATA/description_blog_data')
+
 
 #------------Work with ben--------------------------------
 # data = np.load('DATA/language.npy')

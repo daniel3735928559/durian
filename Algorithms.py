@@ -18,7 +18,7 @@ from make_fake_blog import make_data
 # labels = np.zeros(n)
 
 #---------Fake blog data--------------------------------
-make_data('DATA/fake_blog_data_II')
+make_data('DATA/fake_blog_data_II', class_choice=True)
 
 data = np.load('DATA/blog_data.npy')
 labels = load_data('DATA/labels_blog_data')
@@ -135,7 +135,7 @@ def pursue_target_closed_from(target, curr, data, selection, labels, alg, params
     # print('\n')
     # print(approx_view)
 
-    if math.fabs(approx_view.max()) > 1:
+    if math.fabs(approx_view.max()) > 1 or math.fabs(approx_view.min()) > 1:
         approx_view = (0.9/approx_view.max())*approx_view
 
             

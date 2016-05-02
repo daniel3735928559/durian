@@ -7,7 +7,7 @@ from Utils import *
 import numpy as np
 
 def make_data(input_filename,max_df=0.5, max_features=None,\
-                             min_df=2, stop_words='english', use_idf = True ):
+                             min_df=2, stop_words='english', use_idf = True, class_choice=True ):
 
     with open(input_filename) as f:
         a = f.readlines()
@@ -15,11 +15,14 @@ def make_data(input_filename,max_df=0.5, max_features=None,\
     data = []
     labels = []
     for row in a:
-        temp = row.split('&')
-        if len(temp) == 2:
-            data.append(temp[1])
-            labels.append(temp[0])
 
+        if class_choice :
+            temp = row.split('&')
+            if len(temp) == 2:
+                data.append(temp[1])
+                labels.append(temp[0])
+        else:
+            data.append(row)                
 
     vectorizer = TfidfVectorizer(max_df=0.5, max_features=None,\
                              min_df=2, stop_words='english', use_idf = True)

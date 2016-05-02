@@ -139,7 +139,7 @@ def pursue_target_closed_from(target, curr, data, selection, labels, alg, params
         approx_view = (0.9/approx_view.max())*approx_view
 
             
-    print approx_view
+    print(approx_view)
     approx_view = np.column_stack((approx_view, labels))
 
     importance = feature_importance(proj)

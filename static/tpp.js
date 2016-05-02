@@ -92,8 +92,8 @@ function set_view(data, ranking){
     for (i = 0; i < data.length; i++) {
 
 	info_array.push(data[i][3])
-	coords = get_display_coords(data[i][0],data[i][1]);
-	//console.log(coords)
+	coords = get_display_coords(parseFloat(data[i][0]),parseFloat(data[i][1]));
+	console.log("CC",data[i],coords)
 	dot = new fabric.Circle({
 	    left:   coords[0],
 	    top:    coords[1],

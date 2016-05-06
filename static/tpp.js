@@ -7,7 +7,17 @@ prev_view = null;
 current_view = null;
 ngscope = null;
 
+function save_current_view(){
+    var arr = get_normalised_coords(canvas.getObjects());
+    for (i = 0; i < arr.length; i++){
+	current_view.data[i][0] = arr[i][0];
+	current_view.data[i][1] = arr[i][1];
+    }
+    
+}
+
 function update_view(method){
+    save_current_view();
     canvas.deactivateAll();
     var changed = [];
     var view_objs = [];
@@ -84,22 +94,38 @@ function previous_view(){
     }
 }
 
-function set_view(data, ranking){
+function set_view(data, ranking, urls){
     prev_view = current_view;
-    current_view = {'data':data,'ranking':ranking}
+    current_view = {'data':data,'ranking':ranking};
+    var changed = {};
+    var arr = canvas.getObjects();
+    for(var i = 0; i < arr.length; i++){
+	changed[i] = arr[i].changed;
+    }
     canvas.clear().renderAll();
-    //console.log("DD", JSON.stringify(data));
     for (i = 0; i < data.length; i++) {
 
 	info_array.push(data[i][3])
 	coords = get_display_coords(parseFloat(data[i][0]),parseFloat(data[i][1]));
 	console.log("CC",coords)
+
+	//------------------------- IMAGES--------------------------
+	// URL = "static/pngs/"+urls[i];//"http://fabricjs.com/lib/pug.jpg"
+	// fabric.Image.fromURL(URL, function (dot) {
+	//     //oImg.set('left', PosX).set('top',PosY);
+	//     canvas.add(dot);
+	// }, {"left": coords[0], "top": coords[1], "scaleX": 0.125, "scaleY": 0.125,
+	//     "stringValue": data[i][3], "label": data[i][2]});
+    	// ----------------------------------------------------------
+	
 	dot = new fabric.Circle({
 	    left:   coords[0],
 	    top:    coords[1],
 	    radius: 10,
 	    fill:   rainbow[data[i][2]] //rainbow[data[i][2]
 	});
+
+	
 	dot.setOriginX("center");
 	dot.setOriginY("center");
 	dot.hasControls = false;
@@ -112,7 +138,7 @@ function set_view(data, ranking){
     //---------------------PIE CHART-------------------
     var arr = canvas.getObjects()
     for (i = 0; i < arr.length; i++){
-	arr[i].changed = false;
+	arr[i].changed = changed[i];
 	old_view.push([arr[i].getLeft(), arr[i].getTop()]);
 	dist[classes[arr[i].label]] += 1 
     }
@@ -138,7 +164,7 @@ function set_view(data, ranking){
 }
 
 socket.on('projection', function(msg) {
-    set_view(msg['data'],msg['ranking'])
+    set_view(msg['data'],msg['ranking'],msg['urls'])
 });
 
 canvas = new fabric.Canvas('c1', { backgroundColor: "#000" });

@@ -84,22 +84,33 @@ function previous_view(){
     }
 }
 
-function set_view(data, ranking){
+function set_view(data, ranking, urls){
     prev_view = current_view;
     current_view = {'data':data,'ranking':ranking}
     canvas.clear().renderAll();
-    //console.log("DD", JSON.stringify(data));
     for (i = 0; i < data.length; i++) {
 
 	info_array.push(data[i][3])
 	coords = get_display_coords(parseFloat(data[i][0]),parseFloat(data[i][1]));
 	console.log("CC",coords)
+
+	//------------------------- IMAGES--------------------------
+	// URL = "static/pngs/"+urls[i];//"http://fabricjs.com/lib/pug.jpg"
+	// fabric.Image.fromURL(URL, function (dot) {
+	//     //oImg.set('left', PosX).set('top',PosY);
+	//     canvas.add(dot);
+	// }, {"left": coords[0], "top": coords[1], "scaleX": 0.125, "scaleY": 0.125,
+	//     "stringValue": data[i][3], "label": data[i][2]});
+    	// ----------------------------------------------------------
+	
 	dot = new fabric.Circle({
 	    left:   coords[0],
 	    top:    coords[1],
 	    radius: 10,
 	    fill:   rainbow[data[i][2]] //rainbow[data[i][2]
 	});
+
+	
 	dot.setOriginX("center");
 	dot.setOriginY("center");
 	dot.hasControls = false;
@@ -138,7 +149,7 @@ function set_view(data, ranking){
 }
 
 socket.on('projection', function(msg) {
-    set_view(msg['data'],msg['ranking'])
+    set_view(msg['data'],msg['ranking'],msg['urls'])
 });
 
 canvas = new fabric.Canvas('c1', { backgroundColor: "#000" });

@@ -2,30 +2,30 @@ fabric.Object.prototype.transparentCorners = false;
 fabric.Object.prototype.hasControls = false;
 
 var old_view = [];
-var rainbow = ["#ffffff"];
 
 prev_view = null;
 current_view = null;
+ngscope = null;
 
-function update_view(){
+function update_view(method){
     canvas.deactivateAll();
     var changed = [];
     var view_objs = [];
-    var arr = canvas.getObjects()
-    var method = angular.element(document.getElementById('c1')).scope().training_method;
-    if(method == "all"){
-	for (i = 0; i < arr.length; i++){
-	    changed.push(i);
-	    view_objs.push(arr[i]);
-	}
+    var view = [];
+    var arr = canvas.getObjects();
+    if(method == "lasso"){
+	changed = angular.element(document.getElementById('c1')).scope().lasso_changed;
+	view = angular.element(document.getElementById('c1')).scope().lasso_view;
+	console.log("LASSO",changed, view);
     }
-    else if(method == "changed"){
+    else{
 	for (i = 0; i < arr.length; i++){
 	    if(arr[i].changed){
 		changed.push(i);
 		view_objs.push(arr[i]);
 	    }
 	}
+	view = get_normalised_coords(view_objs);
     }
 
     var arr = canvas.getObjects();
@@ -56,8 +56,8 @@ function update_view(){
     make_bar_chart(bar_data)
     //--------------------------------------------------------
     
-    lasso_flag = angular.element(document.getElementById('c1')).scope().lasso 
-    socket.emit('get_projection', {'changed':changed,'view':get_normalised_coords(view_objs),'old':old_view, 'algorithm': angular.element(document.getElementById('c1')).scope().selected_alg, 'params':angular.element(document.getElementById('c1')).scope().get_params()});
+    //lasso_flag = angular.element(document.getElementById('c1')).scope().lasso 
+    socket.emit('get_projection', {'changed':changed,'view':view,'old':old_view, 'algorithm': method, 'params':angular.element(document.getElementById('c1')).scope().get_params()});
 
 
 }
@@ -251,17 +251,22 @@ canvas.on('object:selected', function(e) {
 })
 
 canvas.on('object:modified', function(e) {
+    ngscope = ngscope || angular.element(document.getElementById('c1')).scope();
     // only group selection works right now)
     if (canvas.getActiveGroup() != undefined){
 	var arr = canvas.getObjects()
 	for (i = 0; i < arr.length; i++){
 	    if (arr[i].active){
 		arr[i].changed = true;
+		ngscope.training_update(false);
 		//console.log("C",arr[i]);
 	    }
 	}
     }
-    else e.target.changed = true;
+    else{
+	e.target.changed = true;
+	ngscope.training_update(false);
+    }
 });
 
 points = canvas._objects

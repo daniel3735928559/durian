@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8">
     <title>DURIAN</title>
     
@@ -21,96 +21,87 @@
     <script type="text/javascript" src="static/bar.js"></script>    
     <script type="text/javascript" src="static/ng.js"></script>
 
-</head>
-<body ng-app="app">
-  {% raw %}
-  <div id="super" ng-controller="ElderberryController" class="container">
-    
-    <!-- <div class="row"> -->
-    <!--   <canvas id="c1" width="1000" height="600" class="col-sm-12"></canvas>       -->
-    <!-- </div> -->
-    <br />
-    <div class="row">
-      <canvas id="c1" width="600" height="400"></canvas>
-    </div>
-    <br />
-    <div id="wrapper" class="row">
-      <div class="col-sm-2" style="cursor:pointer;border:1px solid black;padding:5px;" onclick="update_view()">Update view</div>
-    </div>
-    <div id="wrapper" class="row">
-      <div class="col-sm-2" style="cursor:pointer;border:1px solid black;padding:5px;" onclick="previous_view()">Previous view</div>
-    </div>
-    <br />
-    <div class="row">
-      <div class="col-sm-2">Select training set:</div>
+  </head>
+  <body ng-app="app">
+    {% raw %}
+    <div id="super" ng-controller="ElderberryController" class="container">
       
-      <div class="col-sm-9">
-	<div ng-repeat="a in training_methods">
-	  <div ng-style="{'border-width':training_method == a ? '2px' :
-			 '1px', 'border-color':training_method == a ? 'blue' :
-			 'gray', 'border-style':'solid','cursor':'pointer'}" class="col-sm-3" ng-click="set_train(a)">{{a}}
-	  </div>
-	</div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-2">Select algorithm: </div>
-      <div class="col-sm-9">
-	<div ng-repeat="a in algorithms">
-	  <div ng-style="{'border-width':selected_alg == a ? '2px' :
-			 '1px', 'border-color':selected_alg == a ? 'blue' :
-			 'gray', 'border-style':'solid','cursor':'pointer'}" class="col-sm-3" ng-click="set_alg(a)">{{a}}
-	    <span ng-if="a == 'lasso'">(lambda:
-	      <input ng-model="$parent.$parent.lasso_param" style="width:50px;height:20px;" />)</span>
-	  </div>
-	</div>
-      </div>
-      
-    </div>	
-    <br>
-    
-    <div class="row">
-      <!-- <button class="col-sm-1" onclick="myFunction(2)">Click me</button> -->
-      <div class="col-sm-3" id="pie">  </div>
-      <div class="col-sm-4" id="bar">  </div>
-
-    </div>
-
-    
-    <div class="row" ng-if="data.length > 0">
-      <span class="col-sm-2">Filter: </span>
-      <input type="text" ng-model="$parent.data_filter" class="col-sm-2"/>
-    </div>
-
-    
-    <div class="row" style="padding:10px;"
-	 ng-repeat="d in data | filter:{2:data_filter} track by $index">
-      <!-- <div class="col-sm-1">{{d[0]}}</div> -->
-      <div class="col-sm-1">{{d[1]}}</div>
-      <div class="col-sm-4">{{d[2]}}</div>
-      <div class="col-sm-7">
-	<span ng-repeat="c in classes track by $index">
-	  <span ng-style="{'margin':'10px',
-			  'padding':'5px',
-			  'border-width':d[0] == $index ? '2px' : '0px',
-			  'border-style':'solid',
-			  'border-color':'black',
-			'background-color':rainbow[$index],'cursor':'pointer'}"
-		ng-click="class_change($parent.$index,$index,d[1])"> {{c}}
-	  </span>
-	</span>
+      <!-- <div class="row"> -->
+      <!--   <canvas id="c1" width="1000" height="600" class="col-sm-12"></canvas>       -->
+      <!-- </div> -->
+      <br />
+      <div class="row">
+	<div class="col-sm-7">
+	  <canvas id="c1" width="600" height="400"></canvas>
+	  <br />
+	  
+      <div id="wrapper" class="row">
+	<button type="button" class="col-sm-4 btn btn-primary" ng-click="run_regression()">Run Least-Squares Regression</button>
       </div>
       <br />
+      <div id="wrapper" class="row">
+	<button type="button" class="col-sm-4 btn btn-primary" ng-click="start_lasso()">Run Lasso</button>
+	<div class="col-sm-2">lambda =
+	{{lasso_param}}<br /><input step="0.001" min="0.0001" max="0.02" type="range" ng-model="lasso_param" ng-change="update_lasso()" /></div>
+      </div>
+      <div id="wrapper" class="row">
+	<button class="col-sm-4 btn btn-primary" onclick="previous_view()">Previous view</button>
+      </div>
+	</div>
+	<div class="col-sm-5">
+	  Training data:
+	  <div class="row" style="padding:10px;" ng-repeat="d in
+							    training_data">
+	    <div class="col-sm-4">{{d.str}}</div>
+	    <button type="button" class="btn btn-primary" ng-click="do_not_train(d.idx)">[x]</button>
+	  </div>
+	  <br />
+	</div>
+	
+      </div>
+      <br />
+      <br />
+      <div class="row">
+	<!-- <button class="col-sm-1" onclick="myFunction(2)">Click me</button> -->
+	<div class="col-sm-3" id="pie">  </div>
+	<div class="col-sm-4" id="bar">  </div>
+
+      </div>
+
+      
+      <div class="row" ng-if="data.length > 0">
+	<span class="col-sm-2">Filter: </span>
+	<input type="text" ng-model="$parent.data_filter" class="col-sm-2"/>
+      </div>
+
+      
+      <div class="row" style="padding:10px;"
+	   ng-repeat="d in data | filter:{2:data_filter} track by $index">
+	<!-- <div class="col-sm-1">{{d[0]}}</div> -->
+	<div class="col-sm-1">{{d[1]}}</div>
+	<div class="col-sm-4">{{d[2]}}</div>
+	<div class="col-sm-7">
+	  <span ng-repeat="c in classes track by $index">
+	    <span ng-style="{'margin':'10px',
+			    'padding':'5px',
+			    'border-width':d[0] == $index ? '2px' : '0px',
+			    'border-style':'solid',
+			    'border-color':'black',
+			    'background-color':rainbow[$index],'cursor':'pointer'}"
+		  ng-click="class_change($parent.$index,$index,d[1])"> {{c}}
+	    </span>
+	  </span>
+	</div>
+	<br />
+      </div>
+      
+      
     </div>
-        
-    
-  </div>
+
+    <script type="text/javascript" src="static/tpp.js"></script>
+    <!-- <script type="text/javascript" src="static/pie.js"></script> -->
 
 
-  <script type="text/javascript" src="static/tpp.js"></script>
-  <!-- <script type="text/javascript" src="static/pie.js"></script> -->
-
- 
-  {% endraw %}
-</body>
+    {% endraw %}
+  </body>
 </html>

@@ -38,7 +38,7 @@ def label_change(message):
 
 @socketio.on('get_projection', namespace='/elderberry')
 def get_projection(message):
-
+    print(message)
     data = get_data()['data'] # actual data
     labels = get_data()['labels'] # classes 
     

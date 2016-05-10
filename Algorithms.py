@@ -56,6 +56,11 @@ def get_random_view():
     return view,desc, list(zip(ranking, values))[:20]
 
 
+def alg_logistic_regression():
+    pass
+
+def neural_net():
+    pass
 
 def alg_lasso(X,y,alpha):
     print("lasso!",alpha)
@@ -155,40 +160,6 @@ def feature_importance(proj):
     return temp
 
     
-def train(targ, curr, data, old_proj, eta, choice='fast'):
-    
-    '''
-    Perform one update step of the batch gradient 
-    descent algorithm
-    '''
-
-    if choice == 'fast':
-        # Solve Least squares for X coordinates
-        X = data
-        y = targ[:,0]
-        w = old_proj[:,0]
-        new_proj_x = least_squares_lms(X, y, w, eta)
-
-        # Solve Least squares for Y  coordinates
-        X = data
-        y = targ[:,1]
-        w = old_proj[:,1]
-        new_proj_y = least_squares_lms(X, y, w, eta)
-        
-    else:
-        # this needs work
-        # do not do this right now
-        X = data
-        y = targ[:,0]
-        new_proj_x = least_squares_optimized(X,y)
-
-        X = data
-        y = targ[:,1]
-        new_proj_y = least_squares_optimized(X,y)
-
-    return np.matrix([new_proj_x, new_proj_y]).T
-
-
 def get_data():
     
     return {'data': data, 'labels': labels}

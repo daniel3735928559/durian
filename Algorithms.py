@@ -1,6 +1,7 @@
 from __future__ import division
 import numpy as np
 import math
+import random
 from sklearn import datasets, linear_model
 from Utils import *
 from make_fake_blog import make_data
@@ -45,6 +46,9 @@ def get_urls():
 
     # return ["AlOH3_BS.png","BS_BF3.png","BS_Br2.png","BS_C2H3Cl.png","BS_C2H3OH.png","BS_C2H5F.png","BS_C2H6.png","BS_C2HCl.png","BS_C3H4.png","BS_C3H5F.png","BS_C3H5OH.png","BS_C4H3Cl.png","BS_C4H3F.png","BS_C4H9OH.png","BS_C5H11Cl.png","BS_C5H11F.png","BS_C5H7Cl.png","BS_C5H9Cl.png","BS_C6H12(Cyclohexane).png","BS_CCl4.png","BS_CH3-.png","BS_CH3Br.png","BS_CH3F.png","BS_CO2.png","BS_CO3(2-).png","BS_CaCl2.png","BS_Cl2.png","BS_F2.png","BS_H2O2.png","BS_H2SO4.png","BS_HNO3.png","BS_LAlanine.png","BS_LiBr.png","BS_N2O.png","BS_NF3.png","BS_NO3-.png","BS_NaBr.png","BS_PO4(3-).png","BS_SO2.png","BrF_BS.png","C2F6_BS.png","C2H7N_dimethylamine_BS.png","C3F8_BS.png","C3H8O3_glycerol_BS.png","C3H9N_trimethylamine_BS.png","C6H11NH2_cyclohexamine_BS.png","C6H7N_analine_BS.png","Cl-_BS.png","Mg(OH)2_BS.png","NO_BS.png"]
 
+def get_points(num,visible,alg):
+    return random.sample([i for i in list(range(n)) if not i in visible], num) if alg == 'random' else []
+    
 def get_random_view():
 
 
@@ -64,6 +68,11 @@ def get_random_view():
     return view,desc, list(zip(ranking, values))[:20]
 
 
+def alg_logistic_regression():
+    pass
+
+def neural_net():
+    pass
 
 def alg_lasso(X,y,alpha):
     print("lasso!",alpha)
@@ -163,40 +172,6 @@ def feature_importance(proj):
     return temp
 
     
-def train(targ, curr, data, old_proj, eta, choice='fast'):
-    
-    '''
-    Perform one update step of the batch gradient 
-    descent algorithm
-    '''
-
-    if choice == 'fast':
-        # Solve Least squares for X coordinates
-        X = data
-        y = targ[:,0]
-        w = old_proj[:,0]
-        new_proj_x = least_squares_lms(X, y, w, eta)
-
-        # Solve Least squares for Y  coordinates
-        X = data
-        y = targ[:,1]
-        w = old_proj[:,1]
-        new_proj_y = least_squares_lms(X, y, w, eta)
-        
-    else:
-        # this needs work
-        # do not do this right now
-        X = data
-        y = targ[:,0]
-        new_proj_x = least_squares_optimized(X,y)
-
-        X = data
-        y = targ[:,1]
-        new_proj_y = least_squares_optimized(X,y)
-
-    return np.matrix([new_proj_x, new_proj_y]).T
-
-
 def get_data():
     
     return {'data': data, 'labels': labels}

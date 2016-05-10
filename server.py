@@ -66,9 +66,10 @@ def initial_projection(message):
     #print(data, ranking)
     emit('projection', {'data': data, 'ranking': ranking, 'urls':urls})
 
-@socketio.on('my broadcast event', namespace='/elderberry')
-def test_message(message):
-    emit('my response', {'data': message['data']}, broadcast=True)
+@socketio.on('request_points', namespace='/elderberry')
+def request_points(message):
+    print(message)
+    emit('new_points', {'visible_indices': get_points(message['num'], message['visible_indices'], message['algorithm'])}, broadcast=True)
 
 @socketio.on('connect', namespace='/elderberry')
 def test_connect():

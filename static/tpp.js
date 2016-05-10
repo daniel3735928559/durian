@@ -13,7 +13,6 @@ function save_current_view(){
 	current_view.data[i][0] = arr[i][0];
 	current_view.data[i][1] = arr[i][1];
     }
-    
 }
 
 function update_view(method){
@@ -68,8 +67,6 @@ function update_view(method){
     
     //lasso_flag = angular.element(document.getElementById('c1')).scope().lasso 
     socket.emit('get_projection', {'changed':changed,'view':view,'old':old_view, 'algorithm': method, 'params':angular.element(document.getElementById('c1')).scope().get_params()});
-
-
 }
 
 function get_normalised_coords(objs){
@@ -95,6 +92,9 @@ function previous_view(){
 }
 
 function set_view(data, ranking, urls){
+    var visible_indices = map_filter_points(function(i,p){ return i; }, function(i,p){ return p.visible; })
+    var temp_visible_indices = map_filter_points(function(i,p){ return i; }, function(i,p){ return p.temp_visible; })
+    
     prev_view = current_view;
     current_view = {'data':data,'ranking':ranking};
     var changed = {};
@@ -129,12 +129,20 @@ function set_view(data, ranking, urls){
 	dot.setOriginX("center");
 	dot.setOriginY("center");
 	dot.hasControls = false;
+	dot.visible = false;
+	dot.temp_visible = false;
 	dot.stringValue = data[i][3];
 	dot.label = data[i][2];
 	canvas.add(dot);
     }
+    
+    map_filter_points(function(i,p){ p.visible = true; },
+		      function(i,p){ return visible_indices.indexOf(i) >= 0; });
+    
+    map_filter_points(function(i,p){ p.temp_visible = true; },
+		      function(i,p){ return temp_visible_indices.indexOf(i) >= 0; });
     canvas.renderAll();
-
+    
     //---------------------PIE CHART-------------------
     var arr = canvas.getObjects()
     for (i = 0; i < arr.length; i++){
@@ -162,6 +170,14 @@ function set_view(data, ranking, urls){
     //-------------------------------------------------    
     
 }
+
+socket.on('new_points', function(msg) {
+    console.log("ASD",msg);
+    map_filter_points(function(i,p){ if(msg.visible_indices.indexOf(i) >= 0) p.visible = true; },
+		      function(i,p){return true;});
+    
+    canvas.renderAll();
+});
 
 socket.on('projection', function(msg) {
     set_view(msg['data'],msg['ranking'],msg['urls'])
@@ -207,6 +223,38 @@ function animate(e, dir) {
 	    onComplete: function() {}
 	});
     }
+}
+
+function map_filter_points(map,filter) {
+    var arr = canvas.getObjects();
+    var ans = [];
+    for(var i = 0; i < arr.length; i++){
+	if(filter(i,arr[i])){
+	    ans.push(map(i,arr[i]));
+	}
+    }
+    return ans;
+}
+
+showing_all = false;
+
+function toggle_show_all(){
+    showing_all = !showing_all;
+    console.log(showing_all);
+    if(showing_all)
+	map_filter_points(function(i,p){ console.log("P",p.visible); p.temp_visible = !p.visible; p.visible = true; },
+			  function(i,p){ return true; })
+    else
+	map_filter_points(function(i,p){ if(p.temp_visible) p.visible = false; },
+			  function(i,p){ return true; })
+    canvas.renderAll();
+}
+
+function request_points(n) {
+    var vi = map_filter_points(function(i,p){return i;},
+			       function(i,p){return p.visible;})
+    console.log("VIVIV",vi);
+    socket.emit('request_points', {'visible_indices':vi,'algorithm':'random','num':n});
 }
 
 canvas.on('object:moving', function(e) { 

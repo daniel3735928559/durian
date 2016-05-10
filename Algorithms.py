@@ -6,36 +6,44 @@ from Utils import *
 from make_fake_blog import make_data
 
 
-#------------DATA scraped from that works----------------
-# X = load_data('DATA/emotional_words_vectors')
-# X = np.array(X)
-
+#--------------------------------------------------------------------
+# Data created so that we clearly separate positive and negative words
 # A = np.load('DATA/extreme_positve_negative.npy')
 # desc = load_data('DATA/extreme_positive_negative_description')
-A = np.load('DATA/circle_data.npy')
-desc = load_data('DATA/circle_desc')
+#--------------------------------------------------------------------
 
-A = np.load('DATA/next_data.npy')
-desc = load_data('DATA/next_desc')
+#--------------------------------------------------------------------
+# Data created from Wikipedia
+# A = np.load('DATA/circle_data.npy')
+# desc = load_data('DATA/circle_desc')
+#--------------------------------------------------------------------
 
+#--------------------------------------------------------------------
+# NeXT emotional words data, gotten from Eigen words
+# A = np.load('DATA/next_data.npy')
+# desc = load_data('DATA/next_desc')
+#--------------------------------------------------------------------
 
-n,p = A.shape
-
-data = A
-labels = np.zeros(n)
+# n,p = A.shape
+# data = A
+# labels = np.zeros(n) # all Unknown labels
 
 #---------Fake blog data--------------------------------
-# make_data('DATA/fake_blog_data_III', class_choice=True)
+make_data('DATA/fake_blog_data_III', class_choice=True)
 
-# data = np.load('DATA/blog_data.npy')
-# n,p = data.shape
-# labels = load_data('DATA/labels_blog_data')
-# #labels = np.zeros(n)
-# desc = load_data('DATA/description_blog_data')
+data = np.load('DATA/blog_data.npy')
+n,p = data.shape
+labels = load_data('DATA/labels_blog_data')
+#labels = np.zeros(n)
+desc = load_data('DATA/description_blog_data')
 
 
 def get_urls():
-    return ["AlOH3_BS.png","BS_BF3.png","BS_Br2.png","BS_C2H3Cl.png","BS_C2H3OH.png","BS_C2H5F.png","BS_C2H6.png","BS_C2HCl.png","BS_C3H4.png","BS_C3H5F.png","BS_C3H5OH.png","BS_C4H3Cl.png","BS_C4H3F.png","BS_C4H9OH.png","BS_C5H11Cl.png","BS_C5H11F.png","BS_C5H7Cl.png","BS_C5H9Cl.png","BS_C6H12(Cyclohexane).png","BS_CCl4.png","BS_CH3-.png","BS_CH3Br.png","BS_CH3F.png","BS_CO2.png","BS_CO3(2-).png","BS_CaCl2.png","BS_Cl2.png","BS_F2.png","BS_H2O2.png","BS_H2SO4.png","BS_HNO3.png","BS_LAlanine.png","BS_LiBr.png","BS_N2O.png","BS_NF3.png","BS_NO3-.png","BS_NaBr.png","BS_PO4(3-).png","BS_SO2.png","BrF_BS.png","C2F6_BS.png","C2H7N_dimethylamine_BS.png","C3F8_BS.png","C3H8O3_glycerol_BS.png","C3H9N_trimethylamine_BS.png","C6H11NH2_cyclohexamine_BS.png","C6H7N_analine_BS.png","Cl-_BS.png","Mg(OH)2_BS.png","NO_BS.png"]
+
+    return ["01F_AN_O.jpeg","01F_CA_C.jpeg","01F_CA_O.jpeg","01F_DI_C.jpeg","01F_DI_O.jpeg","01F_FE_C.jpeg","01F_FE_O.jpeg","01F_HA_C.jpeg","01F_HA_O.jpeg","01F_HA_X.jpeg","01F_NE_C.jpeg","01F_NE_O.jpeg","01F_SA_C.jpeg","01F_SA_O.jpeg","01F_SP_O.jpeg","01f_an_c.jpeg","06F_AN_C.jpeg","06F_AN_O.jpeg","06F_CA_C.jpeg","06F_CA_O.jpeg","06F_DI_C.jpeg","06F_DI_O.jpeg","06F_FE_C.jpeg","06F_FE_O.jpeg","06F_HA_C.jpeg","06F_HA_O.jpeg","06F_HA_X.jpeg","06F_NE_C.jpeg","06F_NE_O.jpeg","06F_SA_C.jpeg","06F_SA_O.jpeg","06F_SP_O.jpeg","09F_AN_C.jpeg","09F_AN_O.jpeg","09F_CA_C.jpeg","09F_CA_O.jpeg","09F_DI_C.jpeg","09F_DI_O.jpeg","09F_FE_C.jpeg","09F_FE_O.jpeg","09F_HA_C.jpeg","09F_HA_O.jpeg","09F_HA_X.jpeg","09F_NE_C.jpeg","09F_NE_O.jpeg","09F_SA_C.jpeg","09F_SA_O.jpeg","09F_SP_O.jpeg","11F_AN_C.jpeg","11F_AN_O.jpeg","11F_CA_C.jpeg","11F_CA_O.jpeg","11F_DI_C.jpeg","11F_DI_O.jpeg","11F_FE_C.jpeg","11F_FE_O.jpeg","11F_HA_C.jpeg","11F_HA_O.jpeg","11F_HA_X.jpeg","11F_NE_C.jpeg","11F_NE_O.jpeg","11F_SA_C.jpeg","11F_SA_O.jpeg","11F_SP_O.jpeg","12F_AN_C.jpeg","12F_AN_O.jpeg","12F_CA_C.jpeg","12F_CA_O.jpeg","12F_DI_C.jpeg","12F_DI_O.jpeg","12F_FE_C.jpeg","12F_FE_O.jpeg","12F_HA_C.jpeg","12F_HA_O.jpeg","12F_HA_X.jpeg","12F_NE_C.jpeg","12F_NE_O.jpeg","12F_SA_C.jpeg","12F_SA_O.jpeg","12F_SP_O.jpeg","13F_AN_C.jpeg","13F_AN_O.jpeg","13F_CA_C.jpeg","13F_CA_O.jpeg","13F_DI_C.jpeg","13F_DI_O.jpeg","13F_FE_C.jpeg","13F_FE_O.jpeg","13F_HA_C.jpeg","13F_HA_O.jpeg","13F_HA_X.jpeg","13F_NE_C.jpeg","13F_NE_O.jpeg","13F_SA_C.jpeg","13F_SA_O.jpeg","13F_SP_O.jpeg","20M_AN_C.jpeg","20M_AN_O.jpeg","20M_CA_C.jpeg","20M_CA_O.jpeg","20M_DI_O.jpeg","20M_FE_C.jpeg","20M_FE_O.jpeg","20M_HA_C.jpeg","20M_HA_O.jpeg","20M_HA_X.jpeg","20M_NE_C.jpeg","20M_NE_O.jpeg","20M_SA_C.jpeg","20M_SA_O.jpeg","20M_SP_O.jpeg","21M_AN_C.jpeg","21M_AN_O.jpeg","21M_CA_C.jpeg","21M_CA_O.jpeg","21M_DI_C.jpeg","21M_DI_O.jpeg","21M_FE_C.jpeg","21M_FE_O.jpeg","21M_HA_C.jpeg","21M_HA_O.jpeg","21M_HA_X.jpeg","21M_NE_C.jpeg","21M_NE_O.jpeg","21M_SA_C.jpeg","21M_SA_O.jpeg","21M_SP_O.jpeg","25M_AN_C.jpeg","25M_AN_O.jpeg","25M_CA_C.jpeg","25M_CA_O.jpeg","25M_DI_C.jpeg","25M_DI_O.jpeg","25M_FE_O.jpeg","25M_HA_C.jpeg","25M_HA_O.jpeg","25M_HA_X.jpeg","25M_NE_C.jpeg","25M_SA_C.jpeg","25M_SA_O.jpeg","25M_SP_O.jpeg","39M_AN_C.jpeg","39M_AN_O.jpeg","39M_CA_C.jpeg","39M_CA_O.jpeg","39M_DI_C.jpeg","39M_DI_O.jpeg","39M_FE_C.jpeg","39M_FE_O.jpeg","39M_HA_C.jpeg","39M_HA_O.jpeg","39M_HA_X.jpeg","39M_NE_C.jpeg","39M_NE_O.jpeg","39M_SA_C.jpeg","39M_SA_O.jpeg","39M_SP_O.jpeg","40M_AN_C.jpeg","40M_AN_O.jpeg","40M_CA_C.jpeg","40M_CA_O.jpeg","40M_DI_C.jpeg","40M_DI_O.jpeg","40M_FE_C.jpeg","40M_FE_O.jpeg","40M_HA_C.jpeg","40M_HA_O.jpeg","40M_HA_X.jpeg","40M_NE_C.jpeg","40M_NE_O.jpeg","40M_SA_C.jpeg","40M_SA_O.jpeg","40M_SP_O.jpeg","43M_AN_C.jpeg","43M_AN_O.jpeg","43M_CA_C.jpeg","43M_CA_O.jpeg","43M_DI_C.jpeg","43M_DI_O.jpeg","43M_FE_C.jpeg","43M_FE_O.jpeg","43M_HA_C.jpeg","43M_HA_O.jpeg","43M_HA_X.jpeg","43M_NE_C.jpeg","43M_NE_O.jpeg","43M_SA_C.jpeg","43M_SA_O.jpeg","43M_SP_O.jpeg"]
+
+
+    # return ["AlOH3_BS.png","BS_BF3.png","BS_Br2.png","BS_C2H3Cl.png","BS_C2H3OH.png","BS_C2H5F.png","BS_C2H6.png","BS_C2HCl.png","BS_C3H4.png","BS_C3H5F.png","BS_C3H5OH.png","BS_C4H3Cl.png","BS_C4H3F.png","BS_C4H9OH.png","BS_C5H11Cl.png","BS_C5H11F.png","BS_C5H7Cl.png","BS_C5H9Cl.png","BS_C6H12(Cyclohexane).png","BS_CCl4.png","BS_CH3-.png","BS_CH3Br.png","BS_CH3F.png","BS_CO2.png","BS_CO3(2-).png","BS_CaCl2.png","BS_Cl2.png","BS_F2.png","BS_H2O2.png","BS_H2SO4.png","BS_HNO3.png","BS_LAlanine.png","BS_LiBr.png","BS_N2O.png","BS_NF3.png","BS_NO3-.png","BS_NaBr.png","BS_PO4(3-).png","BS_SO2.png","BrF_BS.png","C2F6_BS.png","C2H7N_dimethylamine_BS.png","C3F8_BS.png","C3H8O3_glycerol_BS.png","C3H9N_trimethylamine_BS.png","C6H11NH2_cyclohexamine_BS.png","C6H7N_analine_BS.png","Cl-_BS.png","Mg(OH)2_BS.png","NO_BS.png"]
 
 def get_random_view():
 

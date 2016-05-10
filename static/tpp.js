@@ -110,11 +110,11 @@ function set_view(data, ranking, urls){
 	console.log("CC",coords)
 
 	//------------------------- IMAGES--------------------------
-	// URL = "static/pngs/"+urls[i];//"http://fabricjs.com/lib/pug.jpg"
+	// URL = "static/faces/"+urls[i];//"http://fabricjs.com/lib/pug.jpg"
 	// fabric.Image.fromURL(URL, function (dot) {
 	//     //oImg.set('left', PosX).set('top',PosY);
 	//     canvas.add(dot);
-	// }, {"left": coords[0], "top": coords[1], "scaleX": 0.125, "scaleY": 0.125,
+	// }, {"left": coords[0], "top": coords[1], "scaleX": 0.25, "scaleY": 0.25,
 	//     "stringValue": data[i][3], "label": data[i][2]});
     	// ----------------------------------------------------------
 	
@@ -174,7 +174,8 @@ socket.on('connect', function() {});
 socket.emit('init_projection', {});
 
 //-------------------------------------GLOBALS------------------
-classes = ["unknown","positive-intense","postive-mellow", "negative-intense", "negative-mellow"];
+classes = ["unknown","Zika-Virus","Brexit", "Ohio-massacre", "UFC-200"];    
+// classes = ["unknown","positive-intense","postive-mellow", "negative-intense", "negative-mellow"];
 rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666","#6c6cfc"];
 var rankingi, dot, dist={}, dataset=[], bar_data=[];
 

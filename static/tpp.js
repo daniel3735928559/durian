@@ -15,6 +15,14 @@ function save_current_view(){
     }
 }
 
+function file_upload(){
+    var reader = new FileReader();
+    reader.onload = function(e) {
+	alert(e.target.result);
+    };
+    reader.readAsDataURL(document.getElementById("file_upload").files[0]);
+}
+
 function update_view(method){
     save_current_view();
     canvas.deactivateAll();

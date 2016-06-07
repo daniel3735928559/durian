@@ -3,6 +3,7 @@ from flask.ext.socketio import SocketIO, emit
 import random
 import numpy as np
 from Algorithms import *
+import base64, zipfile, csv
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = str(random.random())
@@ -15,6 +16,17 @@ def index():
 @app.route('/static/<path:path>')
 def send_static(path):
     return send_from_directory('static', path)
+
+@socketio.on('dataset', namespace='/elderberry')
+def load_data(message):
+    dataset_raw = base64.b64decode(message['dataset'])
+    dataset_file = StringIO(dataset_raw)
+    z = zipfile.ZipFile(dataset_file)
+    feature_file = StringIO(z.read("features.csv"))
+    features = list(csv.reader(feature_file))
+    descriptions_file = StringIO(z.read("descriptions.csv"))
+    descriptions = list(csv.reader(feature_file))
+    set_data(features, descriptions)
 
 @socketio.on('data', namespace='/elderberry')
 def test_message(message):

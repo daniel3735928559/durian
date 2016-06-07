@@ -47,6 +47,10 @@
       </div>
       <br />
       <div id="wrapper" class="row">
+	<input type="file" id="file_upload" class="col-sm-4 btn btn-primary" onchange="file_upload()"></input>
+      </div>
+      <br />	  
+      <div id="wrapper" class="row">
 	<button type="button" class="col-sm-4 btn btn-primary" ng-click="start_lasso()">Run Lasso</button>
 	<div class="col-sm-2">lambda =
 	{{lasso_param}}<br /><input step="0.001" min="0.0001" max="0.02" type="range" ng-model="lasso_param" ng-change="update_lasso()" /></div>

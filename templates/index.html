@@ -24,6 +24,34 @@
     {% raw %}
     <div id="super" ng-controller="ElderberryController" class="container">      
       <br />
+      <div id="wrapper" class="row">
+	<input type="file" id="file_upload" class="col-sm-2 btn btn-primary" onchange="file_upload()"></input>
+      </div>
+      <br />
+
+      <div id="wrapper" class="row">
+	<!-- <div "col-sm-3"> -->
+	<!-- </div> -->
+	
+	<div class="col-sm-7">
+	  <input type="text" ng-model="foo" placeholder="Enter something" />
+	  <input type="button" ng-click="doSomething()" value="Add new class label" ng-disabled="foo == null" />
+
+	  <span ng-repeat="c in classes track by $index">
+	    <span ng-style="{'margin':'10px',
+			    'padding':'5px',
+			    'border-width':d[0] == $index ? '2px' : '0px',
+			    'border-style':'solid',
+			    'border-color':'black',
+			    'background-color':rainbow[$index],'cursor':'pointer'}"
+		  ng-click="remove_class($index)"> {{c}} [x]
+	    </span>
+	  </span>
+	</div>
+      </div>
+      <br />
+      
+
       <div class="row">
 	<div class="col-sm-10">
 	  <canvas id="c1" width="950" height="400"></canvas>
@@ -59,12 +87,6 @@
       </div>
       <br />
       
-      <div id="wrapper" class="row">
-	<input type="text" ng-model="foo" placeholder="Enter something" />
-	<input type="button" ng-click="doSomething()" value="Add new class label" ng-disabled="foo == null" />	
-      	<!-- <button type="button" class="col-sm-4 btn btn-primary" ng-click="add_new_class('messi')">Add new class</button> -->
-      </div>
-      <br />
       
       <div id="wrapper" class="row">
 	<button type="button" class="col-sm-4 btn btn-primary" onclick="toggle_show_all()">Toggle show all</button>
@@ -72,12 +94,9 @@
       <br />
       <div id="wrapper" class="row">
 	<button type="button" class="col-sm-4 btn btn-primary" ng-click="run_regression()">Run Least-Squares Regression</button>
-      </div>
-      <br />
-      <div id="wrapper" class="row">
-	<input type="file" id="file_upload" class="col-sm-4 btn btn-primary" onchange="file_upload()"></input>
-      </div>
-      <br />	  
+      </div>      <br />
+      
+      
       <div id="wrapper" class="row">
 	<button type="button" class="col-sm-4 btn btn-primary" ng-click="start_lasso()">Run Lasso</button>
 	<div class="col-sm-2">lambda =

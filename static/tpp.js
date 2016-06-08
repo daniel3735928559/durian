@@ -31,7 +31,9 @@ function file_upload(e){
 
 function update_view(method){
 
+    d3.select("#bar").remove();    
     classes = controllerScope.scope().$$childHead.classes
+    rainbow = controllerScope.scope().$$childHead.rainbow
     save_current_view();
     canvas.deactivateAll();
     var changed = [];
@@ -57,6 +59,7 @@ function update_view(method){
     var arr = canvas.getObjects();
 
 
+   
     //------------------BAR CHART--------------
     bar_data = []
     for(i in current_view.ranking){
@@ -100,6 +103,7 @@ function previous_view(){
 function set_view(data, ranking, urls){
 
     classes = controllerScope.scope().$$childHead.classes
+    rainbow = controllerScope.scope().$$childHead.rainbow
     
     var visible_indices = map_filter_points(function(i,p){ return i; }, function(i,p){ return p.visible; })
     var temp_visible_indices = map_filter_points(function(i,p){ return i; }, function(i,p){ return p.temp_visible; })
@@ -172,7 +176,6 @@ function set_view(data, ranking, urls){
     for(i in ranking){
 	bar_data.push({"letter": ranking[i][0], "frequency": ranking[i][1]})
     }
-
     make_bar_chart(bar_data)
     //-------------------------------------------------    
     
@@ -201,10 +204,9 @@ socket.emit('init_projection', {});
 var controllerElement = document.querySelector('body');
 var controllerScope = angular.element(controllerElement)
 
-classes = null
-// classes = ["unknown","Zika-Virus","Brexit", "Ohio-massacre", "UFC-200"];    
-// classes = ["unknown","positive-intense","postive-mellow", "negative-intense", "negative-mellow"];
-rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666","#6c6cfc"];
+classes = null;
+rainbow = null;
+
 var rankingi, dot, dist={}, dataset=[], bar_data=[];
 
 for (i in classes){

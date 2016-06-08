@@ -11,6 +11,7 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
     $scope.training_methods = ["all","changed"];
     $scope.training_data = [];
     $scope.training_method = $scope.training_methods[0];
+    
     $scope.rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666","#6c6cfc"];
     $scope.lasso_changed = [];
     $scope.lasso_view = [];
@@ -76,6 +77,12 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
     $scope.foo = null;
     $scope.doSomething = function(){	
 	$scope.classes.push($scope.foo)
+    }
+
+    $scope.remove_class = function(index){
+
+	$scope.classes.splice(index,1)
+
     }
     
     $scope.class_change = function(table_index, class_index, data_index){

@@ -15,10 +15,15 @@ function save_current_view(){
     }
 }
 
-function file_upload(){
+function file_upload(e){
     var reader = new FileReader();
     reader.onload = function(e) {
-	alert(e.target.result);
+	data = e.target.result.split(",")[1];
+	$.ajax({
+	    "url":"/dataset",
+	    "method":"post",
+	    "data":{"dataset":data}
+	}).done(function(data){socket.emit('init_projection', {});})
     };
     reader.readAsDataURL(document.getElementById("file_upload").files[0]);
 }

@@ -13,9 +13,12 @@ function save_current_view(){
 	current_view.data[i][0] = arr[i][0];
 	current_view.data[i][1] = arr[i][1];
     }
+
 }
 
 function update_view(method){
+
+    classes = controllerScope.scope().$$childHead.classes
     save_current_view();
     canvas.deactivateAll();
     var changed = [];
@@ -28,6 +31,7 @@ function update_view(method){
 	console.log("LASSO",changed, view);
     }
     else{
+
 	for (i = 0; i < arr.length; i++){
 	    if(arr[i].changed){
 		changed.push(i);
@@ -39,22 +43,6 @@ function update_view(method){
 
     var arr = canvas.getObjects();
 
-    // for (i in classes){
-    // 	dist[classes[i]] = 0
-    // }
-
-    // for (i = 0; i < arr.length; i++){
-    // 	dist[classes[arr[i].label]] += 1 
-    // }
-
-    dataset = []
-    // console.log(dist)
-    // for(i in dist){
-    // 	dataset.push({category: i, measure: dist[i]})
-    // }
-
-    d3.selectAll("svg").remove();
-    dsPieChart(dataset);
 
     //------------------BAR CHART--------------
     bar_data = []
@@ -70,11 +58,16 @@ function update_view(method){
 }
 
 function get_normalised_coords(objs){
+   
     var answer = [];
+    console.log(objs.length)
     for(var i = 0; i < objs.length; i++){
-	answer.push([(objs[i].getLeft()-canvas.width/2)/(canvas.width/2),(objs[i].getTop()-canvas.height/2)/(canvas.height/2)])
+	answer.push([(objs[i].getLeft() - canvas.width/2)/(canvas.width/2),(objs[i].getTop()-canvas.height/2)/(canvas.height/2)])
     }
+    
     return answer;
+
+
 }
 
 function get_display_coords(x,y){
@@ -92,6 +85,9 @@ function previous_view(){
 }
 
 function set_view(data, ranking, urls){
+
+    classes = controllerScope.scope().$$childHead.classes
+    
     var visible_indices = map_filter_points(function(i,p){ return i; }, function(i,p){ return p.visible; })
     var temp_visible_indices = map_filter_points(function(i,p){ return i; }, function(i,p){ return p.temp_visible; })
     
@@ -107,7 +103,7 @@ function set_view(data, ranking, urls){
 
 	info_array.push(data[i][3])
 	coords = get_display_coords(parseFloat(data[i][0]),parseFloat(data[i][1]));
-	console.log("CC",coords)
+	// console.log("CC",coords)
 
 	//------------------------- IMAGES--------------------------
 	// URL = "static/faces/"+urls[i];//"http://fabricjs.com/lib/pug.jpg"
@@ -118,21 +114,33 @@ function set_view(data, ranking, urls){
 	//     "stringValue": data[i][3], "label": data[i][2]});
     	// ----------------------------------------------------------
 	
-	dot = new fabric.Circle({
+	circle = new fabric.Circle({
 	    left:   coords[0],
 	    top:    coords[1],
 	    radius: 10,
 	    fill:   rainbow[data[i][2]] //rainbow[data[i][2]
 	});
 
-	
-	dot.setOriginX("center");
-	dot.setOriginY("center");
+
+	text = new fabric.Text(data[i][3],{
+	    left:   coords[0]+2*10,
+	    top:    coords[1],
+	    fontFamily: 'Delicious',
+	    fill: '#f55',
+	    fontSize: 22
+	    
+	});
+
+	var dot = new fabric.Group([circle, text]);
+
+	// dot.setOriginX("center");
+	// dot.setOriginY("center");
 	dot.hasControls = false;
 	dot.visible = false;
 	dot.temp_visible = false;
 	dot.stringValue = data[i][3];
 	dot.label = data[i][2];
+	
 	canvas.add(dot);
     }
     
@@ -144,20 +152,6 @@ function set_view(data, ranking, urls){
     canvas.renderAll();
     
     //---------------------PIE CHART-------------------
-    var arr = canvas.getObjects()
-    for (i = 0; i < arr.length; i++){
-	arr[i].changed = changed[i];
-	old_view.push([arr[i].getLeft(), arr[i].getTop()]);
-	dist[classes[arr[i].label]] += 1 
-    }
-    dataset = []
-    for(i in dist){
-	dataset.push({category: i, measure: dist[i]})
-    }
-
-    
-    d3.selectAll("svg").remove();
-    dsPieChart(dataset);
     //-------------------------------------------------
 
     //---------------------BAR CHART-------------------    
@@ -172,7 +166,7 @@ function set_view(data, ranking, urls){
 }
 
 socket.on('new_points', function(msg) {
-    console.log("ASD",msg);
+    // console.log("ASD",msg);
     map_filter_points(function(i,p){ if(msg.visible_indices.indexOf(i) >= 0) p.visible = true; },
 		      function(i,p){return true;});
     
@@ -190,7 +184,12 @@ socket.on('connect', function() {});
 socket.emit('init_projection', {});
 
 //-------------------------------------GLOBALS------------------
-classes = ["unknown","Zika-Virus","Brexit", "Ohio-massacre", "UFC-200"];    
+
+var controllerElement = document.querySelector('body');
+var controllerScope = angular.element(controllerElement)
+
+classes = null
+// classes = ["unknown","Zika-Virus","Brexit", "Ohio-massacre", "UFC-200"];    
 // classes = ["unknown","positive-intense","postive-mellow", "negative-intense", "negative-mellow"];
 rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666","#6c6cfc"];
 var rankingi, dot, dist={}, dataset=[], bar_data=[];
@@ -254,8 +253,12 @@ function toggle_show_all(){
 function request_points(n) {
     var vi = map_filter_points(function(i,p){return i;},
 			       function(i,p){return p.visible;})
-    console.log("VIVIV",vi);
+    // console.log("VIVIV",vi);
     socket.emit('request_points', {'visible_indices':vi,'algorithm':'random','num':n});
+}
+
+function add_new_class(word){
+    console.log(word);
 }
 
 canvas.on('object:moving', function(e) { 

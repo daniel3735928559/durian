@@ -7,8 +7,7 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
     $scope.algorithms = ["regression","lasso"]
     $scope.lasso_param = 0.01;
     $scope.selected_alg = $scope.algorithms[0];
-    $scope.classes = ["unknown","Zika-Virus","Brexit", "Ohio-massacre", "UFC-200"];    
-    // $scope.classes = ["unknown","positive-intense","postive-mellow", "negative-intense", "negative-mellow"];
+    $scope.classes = ["unknown"];    
     $scope.training_methods = ["all","changed"];
     $scope.training_data = [];
     $scope.training_method = $scope.training_methods[0];
@@ -48,7 +47,6 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
     }
     $scope.training_update = function(ng){
 	$scope.training_data = [];
-	console.log("TUTUTU");
 	var arr = canvas.getObjects();
 	for(var i = 0; i < arr.length; i++){
 	    if(arr[i].changed){
@@ -73,28 +71,18 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
 	$scope.data = data;
 	$scope.$apply();
     }
+
+    // adding a new class label stuff
+    $scope.foo = null;
+    $scope.doSomething = function(){	
+	$scope.classes.push($scope.foo)
+    }
     
     $scope.class_change = function(table_index, class_index, data_index){
 	var arr = canvas.getObjects();
 	arr[data_index].label = class_index;
-	arr[data_index].fill = $scope.rainbow[class_index];
+	arr[data_index]._objects[0].fill = $scope.rainbow[class_index];
 	$scope.data[table_index][0] = class_index;
-
-	for (i in $scope.classes){
-	    dist[classes[i]] = 0
-	}
-
-	for (i = 0; i < arr.length; i++){
-	    dist[$scope.classes[arr[i].label]] += 1 
-	}
-
-	dataset = []
-	for(i in dist){
-	    dataset.push({category: i, measure: dist[i]})
-	}
-
-	d3.select("svg").remove();
-	dsPieChart(dataset);
 	
 	canvas.renderAll();
 	socket.emit('label_change', {'index':data_index,'label':class_index});

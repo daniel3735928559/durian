@@ -21,22 +21,23 @@ from make_fake_blog import make_data
 
 #--------------------------------------------------------------------
 # NeXT emotional words data, gotten from Eigen words
-# A = np.load('DATA/next_data.npy')
-# desc = load_data('DATA/next_desc')
+A = np.load('DATA/next_data.npy')
+desc = load_data('DATA/next_desc')
+n,p = A.shape
+data = A
+labels = np.zeros(n) # all Unknown labels
+print(n,"total number of data points") 
 #--------------------------------------------------------------------
 
-# n,p = A.shape
-# data = A
-# labels = np.zeros(n) # all Unknown labels
 
 #---------Fake blog data--------------------------------
-make_data('DATA/fake_blog_data_III', class_choice=True)
+# make_data('DATA/fake_blog_data_III', class_choice=True)
 
-data = np.load('DATA/blog_data.npy')
-n,p = data.shape
-labels = load_data('DATA/labels_blog_data')
-#labels = np.zeros(n)
-desc = load_data('DATA/description_blog_data')
+# data = np.load('DATA/blog_data.npy')
+# n,p = data.shape
+# labels = load_data('DATA/labels_blog_data')
+# #labels = np.zeros(n)
+# desc = load_data('DATA/description_blog_data')
 
 
 def get_urls():

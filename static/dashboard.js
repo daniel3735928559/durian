@@ -31,7 +31,7 @@ function dsPieChart(dataset){
 	color = d3.scale.category20();//builtin range of colors;
 
     var rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666"];
-    console.log(color)
+    
     
     var vis = d3.select("#pie")
 	.append("svg:svg")              

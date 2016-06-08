@@ -13,6 +13,15 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
     $scope.training_method = $scope.training_methods[0];
     
     $scope.rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666","#6c6cfc"];
+    $scope.get_rainbow = function(class_name){
+	console.log("iweud",class_name);
+	var letters = '456789ABCDE'.split('');
+	var color = '#';
+	for (var i = 0; i < 6; i++ ) {
+	    color += letters[class_name.charCodeAt((i)%(class_name.length))%(letters.length)];
+	}
+	return color;
+    }
     $scope.lasso_changed = [];
     $scope.lasso_view = [];
 
@@ -75,8 +84,9 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
 
     // adding a new class label stuff
     $scope.foo = null;
-    $scope.doSomething = function(){	
+    $scope.add_label = function(){	
 	$scope.classes.push($scope.foo)
+	$scope.$apply();
     }
 
     $scope.remove_class = function(index){

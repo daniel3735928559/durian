@@ -25,29 +25,26 @@
     <div id="super" ng-controller="ElderberryController" class="container">      
       <br />
       <div id="wrapper" class="row">
-	<input type="file" id="file_upload" class="col-sm-2 btn btn-primary" onchange="file_upload()"></input>
+	<div class="col-sm-2">Select a zip file: </div>
+	<input type="file" id="file_upload" class="col-sm-3 btn btn-primary" onchange="file_upload()"></input>
       </div>
       <br />
 
       <div id="wrapper" class="row">
+	<div class="col-sm-2">Set up labels: </div>
 	<!-- <div "col-sm-3"> -->
 	<!-- </div> -->
 	
-	<div class="col-sm-7">
-	  <input type="text" ng-model="foo" placeholder="Enter something" />
-	  <input type="button" ng-click="doSomething()" value="Add new class label" ng-disabled="foo == null" />
-
-	  <span ng-repeat="c in classes track by $index">
-	    <span ng-style="{'margin':'10px',
-			    'padding':'5px',
-			    'border-width':d[0] == $index ? '2px' : '0px',
-			    'border-style':'solid',
-			    'border-color':'black',
-			    'background-color':rainbow[$index],'cursor':'pointer'}"
-		  ng-click="remove_class($index)"> {{c}} [x]
-	    </span>
+	  <span ng-repeat="c in classes track by $index" ng-style="{'margin':'10px',
+			  'class':'col-sm-1',
+			  'padding':'5px',
+			  'border-width':d[0] == $index ? '2px' : '0px',
+			  'border-style':'solid',
+			  'border-color':'black',
+			  'background-color':get_rainbow(c),'cursor':'pointer'}"
+		ng-click="remove_class($index)"> {{c}} [x]
 	  </span>
-	</div>
+	<input id="label_input" type="text" class="col-sm-2" ng-model="foo" placeholder="New label" />
       </div>
       <br />
       
@@ -74,7 +71,7 @@
 			    'border-width':d[0] == $index ? '2px' : '0px',
 			    'border-style':'solid',
 			    'border-color':'black',
-			    'background-color':rainbow[$index],'cursor':'pointer'}"
+			    'background-color':get_rainbow(c),'cursor':'pointer'}"
 		  ng-click="class_change($parent.$index,$index,d[1])"> {{c}}
 	    </span>
 	  </span>

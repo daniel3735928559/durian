@@ -8,3 +8,4 @@ access.log
 report
 .gitignore
 .DS_Store
+*#*

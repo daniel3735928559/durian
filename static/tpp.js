@@ -7,6 +7,12 @@ prev_view = null;
 current_view = null;
 ngscope = null;
 
+$("#label_input").keyup(function (e) {
+    if (e.keyCode == 13) {
+	angular.element(document.getElementById('c1')).scope().add_label();
+    }
+});
+
 function save_current_view(){
     var arr = get_normalised_coords(canvas.getObjects());
     for (i = 0; i < arr.length; i++){
@@ -130,12 +136,14 @@ function set_view(data, ranking, urls){
 	// }, {"left": coords[0], "top": coords[1], "scaleX": 0.25, "scaleY": 0.25,
 	//     "stringValue": data[i][3], "label": data[i][2]});
     	// ----------------------------------------------------------
-	
+
+	var sc = angular.element(document.getElementById('c1')).scope()
+	console.log("CCCC",data[i][2],sc.classes[data[i][2]]);
 	circle = new fabric.Circle({
 	    left:   coords[0],
 	    top:    coords[1],
 	    radius: 10,
-	    fill:   rainbow[data[i][2]] //rainbow[data[i][2]
+	    fill:   sc.get_rainbow(sc.classes[data[i][2]]) //rainbow[data[i][2]
 	});
 
 
@@ -268,7 +276,7 @@ function toggle_show_all(){
 function request_points(n) {
     var vi = map_filter_points(function(i,p){return i;},
 			       function(i,p){return p.visible;})
-    // console.log("VIVIV",vi);
+    console.log("VIVIV",vi);
     socket.emit('request_points', {'visible_indices':vi,'algorithm':'random','num':n});
 }
 

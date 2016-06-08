@@ -1,8 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask.ext.socketio import SocketIO, emit
 import random
 import numpy as np
 from Algorithms import *
+import base64, zipfile, csv
+from io import StringIO, BytesIO
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = str(random.random())
@@ -15,6 +17,25 @@ def index():
 @app.route('/static/<path:path>')
 def send_static(path):
     return send_from_directory('static', path)
+
+@app.route('/dataset',methods=['POST'])
+def load_data():
+    print(request.form['dataset'])
+    dataset_raw = base64.b64decode(request.form['dataset'])
+    print(dataset_raw)
+    dataset_file = BytesIO(dataset_raw)
+    z = zipfile.ZipFile(dataset_file)
+    s = z.read("features.csv").decode('utf-8')
+    print(s[:100])
+    feature_file = StringIO(s)
+    features = list(csv.reader(feature_file))
+    s = z.read("descriptions.csv").decode('utf-8')
+    print(s[:100])
+    descriptions_file = StringIO(s)
+    descriptions = list(csv.reader(descriptions_file))
+    print(len(descriptions))
+    set_data(np.array(features).astype(np.float), descriptions)
+    return "asda"
 
 @socketio.on('data', namespace='/elderberry')
 def test_message(message):
@@ -60,6 +81,7 @@ def get_projection(message):
 def initial_projection(message):
     print('asd')
     view,desc, imp = get_random_view()
+    print(len(desc),len(view))
     urls = get_urls()
     data = [list(view[i])+[desc[i]] for i in range(len(view))]
     ranking = [[int(imp[i][0]),float(imp[i][1])] for i in range(len(imp))]

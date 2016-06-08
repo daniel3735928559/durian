@@ -16,6 +16,19 @@ function save_current_view(){
 
 }
 
+function file_upload(e){
+    var reader = new FileReader();
+    reader.onload = function(e) {
+	data = e.target.result.split(",")[1];
+	$.ajax({
+	    "url":"/dataset",
+	    "method":"post",
+	    "data":{"dataset":data}
+	}).done(function(data){socket.emit('init_projection', {});})
+    };
+    reader.readAsDataURL(document.getElementById("file_upload").files[0]);
+}
+
 function update_view(method){
 
     classes = controllerScope.scope().$$childHead.classes

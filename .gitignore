@@ -5,3 +5,5 @@ node_modules
 .deploy_manifest
 OLD
 access.log
+report
+.gitignore

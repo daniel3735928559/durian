@@ -98,13 +98,10 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
     $scope.class_change = function(table_index, class_index, data_index){
 	var arr = canvas.getObjects();
 	arr[data_index].label = class_index;
-	arr[data_index]._objects[0].fill = $scope.rainbow[class_index];
+	arr[data_index]._objects[0].fill = $scope.get_rainbow($scope.classes[class_index]);
 	$scope.data[table_index][0] = class_index;
 	
 	canvas.renderAll();
 	socket.emit('label_change', {'index':data_index,'label':class_index});
     }
 }]);
-
-
-

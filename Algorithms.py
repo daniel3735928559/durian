@@ -11,20 +11,21 @@ import zipfile
 # Data created so that we clearly separate positive and negative words
 # A = np.load('DATA/extreme_positve_negative.npy')
 # desc = load_data('DATA/extreme_positive_negative_description')
+class_names=["unknownz"]
 
-def set_data(features, descriptions):
-    global A, desc, n, p, data, labels
+def set_data(features, descriptions, classes):
+    global A, desc, n, p, data, labels, class_names
     A = features
     desc = descriptions
-    if type(desc[0]) == list:
-        desc = [x[0] for x in desc]
     n,p = A.shape
     data = A
     labels = np.zeros(n)
     print(A,desc,n,p,len(labels))
-    print("DESC",desc)
+    print("DESC",desc,classes)
+    class_names = classes
+    print("CN",class_names)
 
-set_data(np.load('DATA/circle_data.npy'),load_data('DATA/circle_desc'))
+set_data(np.load('DATA/circle_data.npy'),load_data('DATA/circle_desc'),["unknowne"])
 #set_data(np.load('DATA/next_data.npy'),load_data('DATA/next_desc'))
 
 
@@ -58,7 +59,8 @@ def get_random_view():
     imp = feature_importance(proj)
     ranking = np.argsort(imp)[::-1]
     values = np.sort(imp)[::-1]
-    return view,desc, list(zip(ranking, values))[:20]
+    print("CCNN",class_names)
+    return view,desc, list(zip(ranking, values))[:20],class_names
 
 
 def alg_logistic_regression():

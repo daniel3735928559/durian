@@ -30,7 +30,7 @@ function file_upload(e){
 	    "url":"/dataset",
 	    "method":"post",
 	    "data":{"dataset":data}
-	}).done(function(data){socket.emit('init_projection', {});})
+	}).done(function(data){console.log(data);socket.emit('init_projection', {});})
     };
     reader.readAsDataURL(document.getElementById("file_upload").files[0]);
 }
@@ -106,10 +106,12 @@ function previous_view(){
     }
 }
 
-function set_view(data, ranking, urls){
-
+function set_view(data, ranking, urls,classes){
+    console.log("CLCLCLC",classes);
+    var sc = angular.element(document.getElementById('c1')).scope()
+    sc.classes = classes;
+    
     classes = controllerScope.scope().$$childHead.classes
-    rainbow = controllerScope.scope().$$childHead.rainbow
     
     var visible_indices = map_filter_points(function(i,p){ return i; }, function(i,p){ return p.visible; })
     var temp_visible_indices = map_filter_points(function(i,p){ return i; }, function(i,p){ return p.temp_visible; })
@@ -198,7 +200,7 @@ socket.on('new_points', function(msg) {
 });
 
 socket.on('projection', function(msg) {
-    set_view(msg['data'],msg['ranking'],msg['urls'])
+    set_view(msg['data'],msg['ranking'],msg['urls'],msg['classes'])
 });
 
 canvas = new fabric.Canvas('c1', { backgroundColor: "#000" });

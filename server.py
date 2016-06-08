@@ -22,19 +22,17 @@ def send_static(path):
 def load_data():
     print(request.form['dataset'])
     dataset_raw = base64.b64decode(request.form['dataset'])
-    print(dataset_raw)
     dataset_file = BytesIO(dataset_raw)
     z = zipfile.ZipFile(dataset_file)
     s = z.read("features.csv").decode('utf-8')
-    print(s[:100])
     feature_file = StringIO(s)
     features = list(csv.reader(feature_file))
     s = z.read("descriptions.csv").decode('utf-8')
-    print(s[:100])
     descriptions_file = StringIO(s)
     descriptions = list(csv.reader(descriptions_file))
-    print(len(descriptions))
-    set_data(np.array(features).astype(np.float), descriptions)
+    descriptions[1] = ["unknowna"]+descriptions[1]
+    print("DD",descriptions[1])
+    set_data(np.array(features).astype(np.float), descriptions[0], classes=descriptions[1])
     return "asda"
 
 @socketio.on('data', namespace='/elderberry')
@@ -75,18 +73,20 @@ def get_projection(message):
     urls = get_urls()
     emit('projection', {'data': [list(view[i])+[desc[i]] for i in range(len(view))],\
                         'urls':urls,\
-                        'ranking': [[int(rank[i][0]),float(rank[i][1])] for i in range(len(rank))]})
+                        'ranking': [[int(rank[i][0]),float(rank[i][1])] for i in range(len(rank))],
+                        'classes':class_names})
 
 @socketio.on('init_projection', namespace='/elderberry')
 def initial_projection(message):
     print('asd')
-    view,desc, imp = get_random_view()
+    view,desc, imp,cs = get_random_view()
     print(len(desc),len(view))
     urls = get_urls()
     data = [list(view[i])+[desc[i]] for i in range(len(view))]
     ranking = [[int(imp[i][0]),float(imp[i][1])] for i in range(len(imp))]
     #print(data, ranking)
-    emit('projection', {'data': data, 'ranking': ranking, 'urls':urls})
+    print("ASAAAAA",cs)
+    emit('projection', {'data': data, 'ranking': ranking, 'urls':urls, 'classes':cs})
 
 @socketio.on('request_points', namespace='/elderberry')
 def request_points(message):

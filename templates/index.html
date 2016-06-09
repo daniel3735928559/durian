@@ -91,10 +91,8 @@
 	  
 	  <div class="row" style="padding:10px;"
 	       ng-repeat="d in data | filter:{2:data_filter} track by $index">
-	    <!-- <div class="col-sm-1">{{d[0]}}</div> -->
-	    <div class="col-sm-1">{{d[1]}}</div>
-	    <div class="col-sm-2">{{d[2]}}</div>
-	    <div class="col-sm-4">
+	    <div class="col-sm-2">({{d[1]}}) {{d[2]}}</div>
+	    <div class="col-sm-8">
 	      <span ng-repeat="c in classes track by $index">
 		<span ng-style="{'margin':'10px',
 				'padding':'5px',

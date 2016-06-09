@@ -168,7 +168,7 @@ function set_view(data, ranking, urls,classes){
 	dot.temp_visible = false;
 	dot.stringValue = data[i][3];
 	dot.label = data[i][2];
-	
+	dot.changed = changed[i];
 	canvas.add(dot);
     }
     

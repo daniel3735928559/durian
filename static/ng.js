@@ -97,7 +97,11 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
 	$scope.classes.splice(index,1)
 
     }
-    
+    $scope.select_point = function(idx){
+	var arr = canvas.getObjects();
+	canvas.deactivateAll();
+	canvas.setActiveObject(arr[idx]);
+    }
     $scope.class_change = function(table_index, class_index, data_index){
 	var arr = canvas.getObjects();
 	arr[data_index].label = class_index;

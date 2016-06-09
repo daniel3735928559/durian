@@ -68,13 +68,13 @@ def get_projection(message):
     alg = message['algorithm']
     params = message['params']
     
-    view,desc, rank = pursue_target_closed_from(target, curr, data, selection, labels, alg, params)
+    view,desc, rank,classes = pursue_target_closed_from(target, curr, data, selection, labels, alg, params)
 
     urls = get_urls()
     emit('projection', {'data': [list(view[i])+[desc[i]] for i in range(len(view))],\
                         'urls':urls,\
                         'ranking': [[int(rank[i][0]),float(rank[i][1])] for i in range(len(rank))],
-                        'classes':class_names})
+                        'classes':classes})
 
 @socketio.on('init_projection', namespace='/elderberry')
 def initial_projection(message):

@@ -159,7 +159,7 @@ def pursue_target_closed_from(target, curr, data, selection, labels, alg, params
     ranking = np.argsort(importance)[::-1]
     values = np.sort(importance)[::-1]
 
-    return approx_view,desc, list(zip(ranking, values))[:20]
+    return approx_view,desc, list(zip(ranking, values))[:20], class_names
 
 def feature_importance(proj):
 

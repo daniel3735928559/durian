@@ -71,10 +71,6 @@
 	  </div>
 	  <br />
 
-	  <div class="row" ng-if="data.length > 0">
-	    <span class="col-sm-2">Filter: </span>
-	    <input type="text" ng-model="$parent.data_filter" class="col-sm-2"/>
-	  </div>
 	  
 	  <div id="wrapper" class="row btn-toolbar">
 	    <button type="button" class="col-sm-2 btn btn-primary"
@@ -88,21 +84,24 @@
 	    
 	  </div>
 
-	  
+	  <br />
+	  <div class="row" ng-if="data.length > 0">
+	    <span class="col-sm-2">Filter: </span>
+	    <input type="text" ng-model="$parent.data_filter" class="col-sm-2"/>
+	  </div>
+	  <br /> 
 	  <div class="row" style="padding:10px;"
 	       ng-repeat="d in data | filter:{2:data_filter} track by $index">
 	    <div class="col-sm-2">({{d[1]}}) {{d[2]}}</div>
-	    <div class="col-sm-8">
-	      <span ng-repeat="c in classes track by $index">
-		<span ng-style="{'margin':'10px',
+	    <div class="col-sm-10">
+	    <span ng-repeat="c in classes track by $index" ng-style="{'margin':'10px',
 				'padding':'5px',
 				'border-width':d[0] == $index ? '2px' : '0px',
 				'border-style':'solid',
 				'border-color':'black',
 				'background-color':get_rainbow(c),'cursor':'pointer'}"
 		      ng-click="class_change($parent.$index,$index,d[1])"> {{c}}
-		</span>
-	      </span>
+	    </span>
 	    </div>
 	    <br />
 	  </div>

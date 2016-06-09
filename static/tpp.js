@@ -110,6 +110,7 @@ function set_view(data, ranking, urls,classes){
     console.log("CLCLCLC",classes);
     var sc = angular.element(document.getElementById('c1')).scope()
     sc.classes = classes;
+    sc.$apply();
     
     classes = controllerScope.scope().$$childHead.classes
     

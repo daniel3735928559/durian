@@ -15,10 +15,10 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
     $scope.rainbow = ["#ffcc66", "#ccff66", "#66ccff", "#ff6fcf", "#ff6666","#6c6cfc"];
     $scope.get_rainbow = function(class_name){
 	console.log("iweud",class_name);
-	var letters = '456789ABCDE'.split('');
+	var letters = '468ACE'.split('');
 	var color = '#';
-	for (var i = 0; i < 6; i++ ) {
-	    color += letters[class_name.charCodeAt((i)%(class_name.length))%(letters.length)];
+	for (var i = 0; i < 3; i++ ) {
+	    color += letters[class_name.charCodeAt((5*i)%(class_name.length))%(letters.length)];
 	}
 	return color;
     }

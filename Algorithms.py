@@ -11,7 +11,7 @@ import zipfile
 # Data created so that we clearly separate positive and negative words
 # A = np.load('DATA/extreme_positve_negative.npy')
 # desc = load_data('DATA/extreme_positive_negative_description')
-class_names=["unknownz"]
+class_names=["unknown"]
 
 def set_data(features, descriptions, classes):
     global A, desc, n, p, data, labels, class_names
@@ -25,7 +25,7 @@ def set_data(features, descriptions, classes):
     class_names = classes
     print("CN",class_names)
 
-set_data(np.load('DATA/circle_data.npy'),load_data('DATA/circle_desc'),["unknowne"])
+set_data(np.load('DATA/circle_data.npy'),load_data('DATA/circle_desc'),["unknown"])
 #set_data(np.load('DATA/next_data.npy'),load_data('DATA/next_desc'))
 
 

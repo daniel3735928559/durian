@@ -30,7 +30,7 @@ def load_data():
     s = z.read("descriptions.csv").decode('utf-8')
     descriptions_file = StringIO(s)
     descriptions = list(csv.reader(descriptions_file))
-    descriptions[1] = ["unknowna"]+descriptions[1]
+    descriptions[1] = ["unknown"]+descriptions[1]
     print("DD",descriptions[1])
     set_data(np.array(features).astype(np.float), descriptions[0], classes=descriptions[1])
     return "asda"

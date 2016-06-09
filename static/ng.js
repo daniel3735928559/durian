@@ -4,9 +4,8 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
     //alert('q');
     $scope.data = {};
     $scope.data_filter = "";
-    $scope.algorithms = ["regression","lasso"]
     $scope.lasso_param = 0.01;
-    $scope.selected_alg = $scope.algorithms[0];
+    $scope.selected_alg = "regression";
     $scope.classes = ["unknown"];    
     $scope.training_methods = ["all","changed"];
     $scope.training_data = [];
@@ -25,6 +24,10 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
     $scope.lasso_changed = [];
     $scope.lasso_view = [];
 
+    $scope.run_alg = function(){
+	$scope.algorithms[$scope.selected_alg]();
+	console.log("AA",$scope.selected_alg);
+    }
     // $scope.update_view = function(a){
     // 	update_view(a);
     // }
@@ -104,4 +107,5 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
 	canvas.renderAll();
 	socket.emit('label_change', {'index':data_index,'label':class_index});
     }
+    $scope.algorithms = {"regression":$scope.run_regression,"lasso":$scope.start_lasso}
 }]);

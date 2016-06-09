@@ -54,7 +54,7 @@
 	    <div class="col-sm-2">
 	      <select class="form-control"
 		      ng-model="selected_alg">
-		<option ng-repeat="alg in algorithms">{{alg}}</option>
+		<option ng-repeat="(alg,algfn) in algorithms">{{alg}}</option>
 	      </select>
 	    </div>
 	    <div class="col-sm-5">
@@ -78,7 +78,7 @@
 	    <button type="button" class="col-sm-2 btn btn-primary"
 		    onclick="toggle_show_all()">Show/hide all</button>
 	    <button type="button" class="col-sm-2 btn btn-primary"
-		    ng-click="run_regression()">Run {{algorithm}}!</button>
+		    ng-click="run_alg()">Run {{selected_alg}}!</button>
 	    <button type="button" class="col-sm-2 btn btn-primary"
 		    onclick="previous_view()">Previous view</button>
 	    

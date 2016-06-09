@@ -20,6 +20,7 @@ function make_bar_chart(data){
 	.orient("left");
 
     var svg = d3.select("#bar").append("svg")
+	.attr("id","the_SVG_ID")
 	.attr("width", width + margin.left + margin.right)
 	.attr("height", height + margin.top + margin.bottom)
 	.append("g")

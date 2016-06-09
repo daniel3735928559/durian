@@ -37,7 +37,6 @@ function file_upload(e){
 
 function update_view(method){
 
-    d3.select("#bar").remove();    
     classes = controllerScope.scope().$$childHead.classes
     rainbow = controllerScope.scope().$$childHead.rainbow
     save_current_view();
@@ -63,16 +62,14 @@ function update_view(method){
     }
 
     var arr = canvas.getObjects();
-
-
    
     //------------------BAR CHART--------------
-    bar_data = []
-    for(i in current_view.ranking){
-	bar_data.push({"letter": current_view.ranking[i][0], "frequency": current_view.ranking[i][1]})
-    }
+    // bar_data = []
+    // for(i in current_view.ranking){
+    // 	bar_data.push({"letter": current_view.ranking[i][0], "frequency": current_view.ranking[i][1]})
+    // }
     
-    make_bar_chart(bar_data)
+    // make_bar_chart(bar_data)
     //--------------------------------------------------------
     
     //lasso_flag = angular.element(document.getElementById('c1')).scope().lasso 
@@ -107,6 +104,8 @@ function previous_view(){
 }
 
 function set_view(data, ranking, urls,classes){
+
+    d3.select("#the_SVG_ID").remove();
     console.log("CLCLCLC",classes);
     var sc = angular.element(document.getElementById('c1')).scope()
     sc.classes = classes;

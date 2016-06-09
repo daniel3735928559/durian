@@ -56,7 +56,7 @@ app.controller("ElderberryController", ['$scope','$http', '$window', '$timeout',
 	update_view('lasso');
     }
     $scope.training_update = function(ng){
-	$scope.training_data = [];
+	//$scope.training_data = [];
 	var arr = canvas.getObjects();
 	for(var i = 0; i < arr.length; i++){
 	    if(arr[i].changed){
